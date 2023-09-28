@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>페이지 8</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <link href="/assets/img/favicon.png" rel="icon">
+    <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+
+    <link href="/assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+    <link href="/assets/css/style.css" rel="stylesheet">
+
+    <script>
+        function changeImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    const imageThumbnail = document.getElementById('imageThumbnail');
+                    imageThumbnail.src = e.target.result;
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        function changeText() {
+            var newText = prompt("새로운 닉네임을 입력하세요:");
+            if (newText !== null) {
+                document.getElementById("dynamicText").innerText = newText;
+            }
+        }
+
+        function 새페이지로이동() {
+            window.location.href = 'index6.html';
+        }
+    </script>
+
+    <style>
+        .flex-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        html {
+            overflow-y: scroll;
+        }
+
+        body {
+            background-image: url('assets/img/bg.png');
+            background-size: cover;
+            background-position: center top;
+            background-repeat: no-repeat;
+        }
+
+        .icon-box img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        @font-face {
+            font-family: 'Nanum Square';
+            src: url('NanumSquareB.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body, h1, h2, h3, h4, h5, h6, p, a {
+            font-family: 'Nanum Square', sans-serif;
+        }
+
+        .custom-button {
+            font-family: 'Nanum Square', sans-serif;
+            font-size: 17px;
+            margin-left: -10px;
+        }
+        #imageInput {
+            display: none;
+        }
+
+        #cameraIcon {
+            font-size: 24px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        #imageThumbnail {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+        }
+
+    </style>
+</head>
+
+<body>
+<header id="header" class="fixed-top">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-3">
+                <a href="index6.html" class="logo custom-logo"><img src="/assets/img/logo.png" alt="Logo" class="img-fluid custom-logo-img"></a>
+            </div>
+            <div class="col-5">
+                <div class="search-input">
+                    <form id="search" action="#">
+                        <input type="text" placeholder="검색어를 입력해주세요.                                                   🔍︎" id="searchText" name="searchKeyword" />
+                    </form>
+                </div>
+            </div>
+            <div class="col-4">
+                <nav id="navbar" class="navbar">
+                    <ul class="d-flex justify-content-end align-items-center">
+                        <li>
+                            <a class="active" href="index6.html">
+                                <img src="/assets/img/logo2.PNG" alt="bell" style="width: 50px; margin-bottom: 10px;">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="index6.html" style="font-size: 17px; font-family: 'Nanum Square', sans-serif; color: #58A581; margin-right: -13px;">로그아웃</a>
+                        </li>
+                        <li>
+                            <a class="getstarted" href="index6.html" style="font-size: 17px; font-family: 'Nanum Square', sans-serif;">마이페이지</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main>
+    <div class="text-center" style="margin-top: 400px; margin-bottom: 50px; margin-right: -158px;">
+        <div style="display: flex; flex-direction: column; align-items: center; margin-left: -90px;">
+
+            <div style="display: flex; align-items: center; position: relative; margin-left: -10px; margin-top: -30px;"> <!-- 썸네일과 카메라 아이콘만 30px 위로 이동 -->
+                <img id="imageThumbnail" src="/assets/img/profile2.PNG" alt="Thumbnail" style="width: 150px; height: 150px; object-fit: cover; border: 1px solid #ddd; border-radius: 50%;">
+
+                <form action="/upload-endpoint" method="post" enctype="multipart/form-data" style="margin-left: 10px;">
+                    <input type="file" id="imageInput" name="photo" accept="image/*" onchange="changeImage(this)" style="display: none;">
+                    <label for="imageInput" id="cameraIcon" style="font-size: 24px; cursor: pointer;">📷</label>
+                </form>
+            </div>
+
+            <div style="display: flex; align-items: center; margin-top: 40px;"> <!-- 이전에 10px이었던 값을 40px로 수정하여 아래 요소의 간격을 조절 -->
+                <p id="dynamicText" style="color: black; font-size: 24px; margin-right: 10px;">김민티</p>
+                <a href="#" class="btn custom-button" style="border: none; background-color: #58A581; color: white; padding: 8px 20px; font-size: 14px; border-radius: 20px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4); margin-left: 5px; margin-bottom: 14px;"
+                   onmouseover="this.style.backgroundColor='#6CBF91'; this.style.boxShadow='0px 6px 12px rgba(0, 0, 0, 0.6)';"
+                   onmouseout="this.style.backgroundColor='#58A581'; this.style.boxShadow='0px 4px 10px rgba(0, 0, 0, 0.4)';"
+                   onclick="changeText()">변경</a>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <form style="margin: -24px auto 0; width: 300px; border-radius: 10px; background-color: transparent; padding: 20px; transform: translateX(16px);">
+        <textarea id="statusMessage" placeholder="상태메세지를 입력해 주세요. 🖊" style="border: none; outline: none; width: 100%; background-color: transparent; font-size: 19px;"></textarea>
+    </form>
+
+    <div class="text-center" style="margin-top: 24px;">
+        <button class="btn custom-button" style="border: none; background-color: #58A581; color: white; padding: 16px 40px; font-size: 28px; border-radius: 50px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4); margin-top: 20px; margin-right: -24px;"
+                onmouseover="this.style.backgroundColor='#6CBF91'; this.style.boxShadow='0px 6px 12px rgba(0, 0, 0, 0.6)';"
+                onmouseout="this.style.backgroundColor='#58A581'; this.style.boxShadow='0px 4px 10px rgba(0, 0, 0, 0.4)';"
+                onclick="새페이지로이동()">수정완료</button>
+    </div>
+</main>
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<script src="/assets/vendor/purecounter/purecounter_vanilla.js"></script>
+<script src="/assets/vendor/aos/aos.js"></script>
+<script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/vendor/glightbox/js/glightbox.min.js"></script>
+<script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+<script src="/assets/vendor/swiper/swiper-bundle.min.js"></script>
+<script src="/assets/vendor/waypoints/noframework.waypoints.js"></script>
+<script src="/assets/vendor/php-email-form/validate.js"></script>
+<script src="/assets/js/main.js"></script>
+</body>
+</html>

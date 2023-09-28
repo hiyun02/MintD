@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kopo.poly.persistance.mapper.IUserInfoMapper">
+    <insert id="insertUserInfo" parameterType="UserInfoDTO">
+        INSERT INTO USER_INFO
+        (
+         USER_ID,
+         USER_NICK,
+         USER_NAME,
+         USER_PWD,
+         USER_EMAIL,
+         PROFILE_PATH,
+         USER_INTRO,
+         USER_DATE     )
+
+        VALUES (#{user_id},
+                #{user_nick},
+                #{user_name},
+                #{user_pwd},
+                #{user_email},
+                #{profile_path},
+                #{user_intro},
+                SYSDATE() )
+
+
+    </insert>
+
+    <select id="getLogin" parameterType="UserInfoDTO" resultType="UserInfoDTO">
+        SELECT USER_ID, USER_NICK, USER_EMAIL, USER_NAME, PROFILE_PATH, USER_INTRO
+        FROM USER_INFO
+        WHERE USER_ID = #{user_id}
+          AND USER_PWD = #{user_pwd}
+    </select>
+    <select id="getUserIdExists" parameterType="UserInfoDTO" resultType="UserInfoDTO">
+        SELECT
+            CASE WHEN COUNT(1) = 0 THEN 'N' ELSE 'Y' END AS Exists_yn
+        FROM
+            USER_INFO
+        WHERE
+            USER_ID = #{user_id};
+    </select>
+
+    <select id="getUserEmailExists" parameterType="UserInfoDTO" resultType="UserInfoDTO">
+        SELECT
+            CASE WHEN COUNT(1) = 0 THEN 'N' ELSE 'Y' END AS EXISTS_YN
+        FROM
+            USER_INFO
+        WHERE
+            USER_EMAIL = #{user_email};
+    </select>
+
+    <select id="getUserId" parameterType="UserInfoDTO" resultType="UserInfoDTO">
+        SELECT
+            USER_ID
+        FROM USER_INFO
+        WHERE 1=1
+        AND USER_EMAIL = #{user_email}
+    </select>
+
+    <select id="checkUserIdAndEmail" parameterType="UserInfoDTO" resultType="UserInfoDTO">
+        SELECT USER_ID,USER_EMAIL
+        FROM USER_INFO
+        WHERE USER_ID = #{user_id}
+          AND USER_EMAIL = #{user_email}
+    </select>
+
+
+    <update id="updateUserPwd" parameterType="UserInfoDTO" >
+        UPDATE  USER_INFO
+        SET USER_PWD = #{user_pwd}
+        WHERE USER_ID = #{user_id}
+    </update>
+
+</mapper>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>고객센터 메인화면</title>
+
+  <style>
+    @font-face {
+      font-family: 'Nanum Square';
+      src: url('NanumSquareB.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    body, h1, h2, h3, h4, h5, h6, p, a {
+      font-family: 'Nanum Square', sans-serif;
+    }
+
+    body {
+      align-items: center;
+      margin: 0 auto; width: 650px; /*정중앙 배치에 필요한 속성 2개*/
+    }
+
+    .qna_title {
+      width: 630px;
+      height: 45px;
+      border-radius: 3px;
+      background-color: #58A581;
+      box-shadow: 3px 4px 10px #C2C2C2;
+      margin-bottom: 45px;
+    }
+
+    .qna_title .qna_text {
+      font-size: 23px;
+      color: #FFFFFF;
+      padding: 10px 10px;
+      text-align: center;
+    }
+
+    .qna_table {
+      table-layout: fixed;   /* 테이블 너비 내가 지정한 값으로 고정 */
+      border: 1px solid #58A581;
+      width: 630px;
+      height: 420px;
+      border-collapse: collapse;  /* 테이블 셀간의 테두리 한 줄로 깔끔하게 */
+      margin-bottom: 30px;
+      box-shadow: 3px 4px 10px #C2C2C2;
+    }
+
+
+    .qna_table col.col1 {
+      width: 70px;   /* 첫 번째 열의 가로 길이 */
+    }
+
+    .qna_table col.col2 {
+      width: 260px;  /* 두 번째 열의 가로 길이 */
+    }
+
+    .qna_table col.col3 {
+      width: 70px;
+    }
+
+    .qna_table th {
+      background-color: #EEEEEE;
+    }
+
+    .qna_table th, .qna_table td {
+      border: 1px solid #58A581;
+      padding: 8px;
+      height: 20px;  /* 이 속성 안 넣으면 th만 세로길이가 달라서 통일성을 위해 넣어줘야 함 */
+    }
+
+    .faq_title_icon {
+      border-radius: 25px;
+      border-width: 2px; /* 테두리 굵기 설정 */
+      border-style: solid; /* 테두리 스타일 설정 */
+      font-size: 18px;
+      color: #FFFFFF;
+      background-color: #58A581;
+      width: 220px;
+      height: 30px;
+      padding: 4px 3px;
+      text-align: center;
+      line-height: 30px;     /* 글씨 조금 내려서 중앙에 위치하게 */
+      box-shadow: -2px 3px 5px #C2C2C2;
+      margin-bottom: 100px;
+      margin-left: 400px;
+    }
+
+    .faq_title_icon span {
+      border-radius: 100px;
+      border-width: 2px;
+      border-style: solid;
+      background-color: #FFFFFF;
+      width: 10px;
+      height: 10px;
+      display: inline-block; /* inline-block으로 설정 */
+      margin: 0 20px; /* 왼쪽과 오른쪽에 5px의 여백을 추가하여 원이 글씨 양옆에 위치하도록 */
+      box-shadow: inset -2px 2px 3px #C2C2C2;
+    }
+
+    .my_qna, .go_write {
+      display: inline-block;  /* 이걸 써야 둘이 한 줄에 나타남 안 쓰면 두 줄로 나타남 */
+      border-radius: 25px;
+      font-size: 20px;
+      color: #FFFFFF;
+      background-color: #58A581;
+      width: 125px;
+      height: 30px;
+      padding: 4px 3px;
+      text-align: center;
+      line-height: 30px;     /* 글씨 조금 내려서 중앙에 위치하게 */
+      box-shadow: 3px 4px 10px #C2C2C2;
+    }
+
+    .my_qna a, .go_write a {
+      color: #FFFFFF;
+      text-decoration: none;  /* <a>는 기본으로 밑줄이 들어가서 밑줄 없애려면 이거 넣어줘야 함 */
+    }
+
+    .my_qna {
+      margin-left: 180px;
+    }
+
+    .go_write {
+      margin-right: 125px;
+      margin-left: 10px;
+    }
+
+  </style>
+</head>
+
+
+<body>
+<div class="faq_title_icon"><span></span>자주 묻는 질문<span></span></div>
+
+<div class="qna_title"><div class="qna_text">문의사항</div></div>
+
+
+  <table class="qna_table">
+    <colgroup>
+      <col class="col1">   <!-- 열별로 다른 width 값 설정하려고(각 열이 지정된 가로 길이를 가질 수 있게 -->
+      <col class="col2">
+      <col class="col3">
+    </colgroup>
+    <tr><th>작성일</th><th>내용</th><th>작성자</th></tr>
+    <tr>
+      <td></td><td></td><td></td>
+    </tr>
+    <tr>
+      <td></td><td></td><td></td>
+    </tr>
+    <tr>
+      <td></td><td></td><td></td>
+    </tr>
+    <tr>
+      <td></td><td></td><td></td>
+    </tr>
+    <tr>
+      <td></td><td></td><td></td>
+    </tr>
+    <tr>
+      <td></td><td></td><td></td>
+    </tr>
+  </table>
+
+
+<a href="/css""><img src="/peppermint/img/arrowicon_L.png" style="width: 40px; height: 40px; margin-right: 273px;"></a><a href=""><img src="/peppermint/img/arrowicon_R.png" style="width: 40px; height: 40px; margin-left: 276px;"></a>
+  <br><br>
+<div class="my_qna"><a href="">내 문의</a></div><div class="go_write"><a href="">작성하기</a></div>
+<br><br><br>
+
+</body>

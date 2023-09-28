@@ -1,0 +1,756 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+<!-- Google Material icon -->
+<link
+        href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+        rel="stylesheet">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<style>
+    #Like_up {
+        font-variation-settings:
+                'FILL' 0,
+                'wght' 400,
+                'GRAD' 0,
+                'opsz' 24
+    }
+</style>
+<body>
+
+<!-- Optional JavaScript; choose one of the two! -->
+
+<!-- Option 1: Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script src="/js/jquery-3.6.0.min.js"></script>
+<script>
+    /*eslint no-undef: "error"*/
+
+    /*eslint-env node*/
+
+    console.log("함수 실행 되었습니다!");
+
+    const diary_seq =  [[${rDTO.diary_seq}]]
+
+    $(document).ready(function () {
+        // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+        $("#Like_up").on("click", function () {
+            doSubmitLike(); // 좋아요수 증가 요청 전달 함수
+        });
+
+        $("#Like_up").on("click", function () {
+            addLike(); // 버튼 색 변경 함수
+        });
+
+        $("#BookMark").on("click", function () {
+            doSubmitBookMark(); // 북마크 추가 요청 전달 함수
+        });
+
+        $("#BookMark").on("click", function () {
+            addBookMark(); // 북마크 추가 요청 전달 함수
+        });
+    });
+
+    function doSubmitLike() {
+        $.ajax({
+            url: "/diary/updateLikeCnt",
+            type: "post",
+            dataType: "JSON",
+            data: {
+                'diary_seq': diary_seq
+            }
+        });
+    };
+
+    console.log("diary_seq : " + diary_seq);
+
+    function addLike() {
+        const pushHeartBtn = document.querySelector("#Like_up");
+              pushHeartBtn.style.color ='#58a581';
+    };
+
+    function doSubmitBookMark() {
+        $.ajax({
+            url: "/diary/insertBookMark",
+            type: "post",
+            dataType: "JSON",
+            data: {
+                'diary_seq': diary_seq
+            }
+        });
+    };
+
+    function addBookMark() {
+        const pushHeartBtn = document.querySelector("#BookMark");
+        pushHeartBtn.style.color ='#58a581';
+    };
+    
+
+    jQuery(document).ready(function ($) {
+
+        $('#checkbox').change(function(){
+            setInterval(function () {
+                moveRight();
+            }, 3000);
+        });
+
+        var slideCount = $('#slider ul li').length;
+        var slideWidth = $('#slider ul li').width();
+        var slideHeight = $('#slider ul li').height();
+        var sliderUlWidth = slideCount * slideWidth;
+
+        $('#slider').css({ width: slideWidth, height: slideHeight });
+
+        $('#slider ul').css({ width: sliderUlWidth, marginLeft: - slideWidth });
+
+        $('#slider ul li:last-child').prependTo('#slider ul');
+
+        function moveLeft() {
+            $('#slider ul').animate({
+                left: + slideWidth
+            }, 200, function () {
+                $('#slider ul li:last-child').prependTo('#slider ul');
+                $('#slider ul').css('left', '');
+            });
+        };
+
+        function moveRight() {
+            $('#slider ul').animate({
+                left: - slideWidth
+            }, 200, function () {
+                $('#slider ul li:first-child').appendTo('#slider ul');
+                $('#slider ul').css('left', '');
+            });
+        };
+
+        $('a.control_prev').click(function () {
+            moveLeft();
+        });
+
+        $('a.control_next').click(function () {
+            moveRight();
+        });
+
+    });
+
+    // <img src="../../../../../../../../../var/folders/pb/p8bg2sj17qg5cnz34c_zq_8m0000gn/T/TemporaryItems/NSIRD_screencaptureui_Vf7eYp/스크린샷 2023-09-16 오후 1.46.59.png"
+    //      height="626" width="716"/>
+
+</script>
+</body>
+
+<style>
+
+
+    .body {
+        padding-top: 100px;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        font-size: 14px;
+        background-color: #FAFAFA
+
+    }
+
+    .left-body {
+        width: 630px;
+        min-width: 630px;
+        height: 1000px;
+        margin-right: 50px;
+    }
+
+
+    .feed-box {
+        border: solid 1px rgb(202, 202, 202);
+        background-color: white;
+        margin-bottom: 25px;
+    }
+
+    .profile {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .profile-id {
+        font-weight: bold;
+    }
+
+    .profile-img-box {
+        width: 40px;
+        height: 40px;
+        border-radius: 70%;
+        overflow: hidden;
+        margin: 10px;
+        margin-right: 15px;
+    }
+
+    .profile-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+
+    .icon {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin: 10px;
+    }
+
+    .like {
+        text-align: left;
+        margin: 10px;
+        font-size: 13px;
+    }
+
+    .feed-text {
+        text-align: left;
+        margin: 10px;
+    }
+
+    .comment {
+        text-align: left;
+        margin: 10px;
+    }
+
+    #input-comment {
+        box-shadow: none;
+        border: none;
+        border-top: solid 1px rgb(202, 202, 202);
+        border-bottom: solid 1px rgb(202, 202, 202);
+    }
+
+    @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600);
+
+    html {
+        border-top: 5px solid #fff;
+        background: #58DDAF;
+        color: #2a2a2a;
+    }
+
+    html, body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Open Sans';
+    }
+
+    h1 {
+        color: #fff;
+        text-align: center;
+        font-weight: 300;
+    }
+
+    #slider {
+        position: relative;
+        overflow: hidden;
+        margin: 20px auto 0 auto;
+        border-radius: 4px;
+    }
+
+    #slider ul {
+        position: relative;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    #slider ul li {
+        position: relative;
+        display: block;
+        float: left;
+        margin: 0;
+        padding: 0;
+        width: 450px;
+        height: 450px;
+        background: #ccc;
+        text-align: center;
+        line-height: 300px;
+    }
+
+    a.control_prev, a.control_next {
+        position: absolute;
+        top: 40%;
+        z-index: 999;
+        display: block;
+        padding: 4% 3%;
+        width: auto;
+        height: auto;
+        background: #2a2a2a;
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 18px;
+        opacity: 0.8;
+        cursor: pointer;
+    }
+
+    a.control_prev:hover, a.control_next:hover {
+        opacity: 1;
+        -webkit-transition: all 0.2s ease;
+    }
+
+    a.control_prev {
+        border-radius: 0 2px 2px 0;
+    }
+
+    a.control_next {
+        right: 0;
+        border-radius: 2px 0 0 2px;
+    }
+    @font-face {
+        font-family: 'NIXGONM-Vb'; !important;
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/NIXGONM-Vb.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    *{
+        font-family: 'NIXGONM-Vb';
+    }
+
+    .dropdown-submenu .dropdown-menu {
+        top: 0;
+        left: 100%;
+        margin-left: .1rem;
+        margin-right: .1rem;
+    }
+
+    /*--------------------------------------------------------------
+    # Header
+    --------------------------------------------------------------*/
+    #header {
+        height: 70px;
+        z-index: 997;
+        transition: all 0.5s ease-in-out;
+        background: #fff;
+        box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    #header .logo h1 {
+        font-size: 28px;
+        margin: 0;
+        line-height: 0;
+        font-weight: 600;
+        letter-spacing: 1px;
+    }
+
+    #header .logo h1 a,
+    #header .logo h1 a:hover {
+        color: #3c4133;
+        text-decoration: none;
+    }
+
+    #header .logo img {
+        padding: 0;
+        margin: 0;
+        max-height: 40px;
+    }
+
+    /*--------------------------------------------------------------
+    # Navigation Menu
+    --------------------------------------------------------------*/
+    /**
+    * Desktop Navigation
+    */
+    .navbar {
+        padding: 0;
+    }
+
+    .navbar ul {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        list-style: none;
+        align-items: center;
+    }
+
+    .navbar li {
+        position: relative;
+    }
+
+    .navbar a,
+    .navbar a:focus {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 0 10px 30px;
+        font-size: 15px;
+        font-weight: 600;
+        color: #565e49;
+        white-space: nowrap;
+        transition: 0.3s;
+    }
+
+    .navbar a i,
+    .navbar a:focus i {
+        font-size: 12px;
+        line-height: 0;
+        margin-left: 5px;
+    }
+
+    .navbar a:hover,
+    .navbar .active,
+    .navbar .active:focus,
+    .navbar li:hover>a {
+        color: #94c045;
+    }
+
+    .navbar .getstarted,
+    .navbar .getstarted:focus {
+        background: #58A581;
+        padding: 8px 20px;
+        margin-left: 30px;
+        border-radius: 50px;
+        color: #fff;
+    }
+
+    .navbar .getstarted:hover,
+    .navbar .getstarted:focus:hover {
+        color: #fff;
+        background: #9fc658;
+    }
+
+    .navbar .dropdown ul {
+        display: block;
+        position: absolute;
+        left: 28px;
+        top: calc(100% + 30px);
+        margin: 0;
+        padding: 10px 0;
+        z-index: 99;
+        opacity: 0;
+        visibility: hidden;
+        background: #fff;
+        box-shadow: 0px 0px 30px rgba(127, 137, 161, 0.25);
+        transition: 0.3s;
+    }
+
+    .navbar .dropdown ul li {
+        min-width: 200px;
+    }
+
+    .navbar .dropdown ul a {
+        padding: 10px 20px;
+        font-size: 15px;
+        text-transform: none;
+    }
+
+    .navbar .dropdown ul a i {
+        font-size: 12px;
+    }
+
+    .navbar .dropdown ul a:hover,
+    .navbar .dropdown ul .active:hover,
+    .navbar .dropdown ul li:hover>a {
+        color: #94c045;
+    }
+
+    .navbar .dropdown:hover>ul {
+        opacity: 1;
+        top: 100%;
+        visibility: visible;
+    }
+
+    .navbar .dropdown .dropdown ul {
+        top: 0;
+        left: calc(100% - 30px);
+        visibility: hidden;
+    }
+
+    .navbar .dropdown .dropdown:hover>ul {
+        opacity: 1;
+        top: 0;
+        left: 100%;
+        visibility: visible;
+    }
+
+    @media (max-width: 1366px) {
+        .navbar .dropdown .dropdown ul {
+            left: -90%;
+        }
+
+        .navbar .dropdown .dropdown:hover>ul {
+            left: -100%;
+        }
+    }
+
+    /**
+    * Mobile Navigation
+    */
+    .mobile-nav-toggle {
+        color: #3c4133;
+        font-size: 28px;
+        cursor: pointer;
+        display: none;
+        line-height: 0;
+        transition: 0.5s;
+    }
+
+    .mobile-nav-toggle.bi-x {
+        color: #fff;
+    }
+
+    @media (max-width: 991px) {
+        .mobile-nav-toggle {
+            display: block;
+        }
+
+        .navbar ul {
+            display: none;
+        }
+    }
+
+    .navbar-mobile {
+        position: fixed;
+        overflow: hidden;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        background: rgba(34, 36, 29, 0.9);
+        transition: 0.3s;
+        z-index: 999;
+    }
+
+    .navbar-mobile .mobile-nav-toggle {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+    }
+
+    .navbar-mobile ul {
+        display: block;
+        position: absolute;
+        top: 55px;
+        right: 15px;
+        bottom: 15px;
+        left: 15px;
+        padding: 10px 0;
+        background-color: #fff;
+        overflow-y: auto;
+        transition: 0.3s;
+    }
+
+    .navbar-mobile a,
+    .navbar-mobile a:focus {
+        padding: 10px 20px;
+        font-size: 15px;
+        color: #3c4133;
+    }
+
+    .navbar-mobile a:hover,
+    .navbar-mobile .active,
+    .navbar-mobile li:hover>a {
+        color: #94c045;
+    }
+
+    .navbar-mobile .getstarted,
+    .navbar-mobile .getstarted:focus {
+        margin: 15px;
+    }
+
+    .navbar-mobile .dropdown ul {
+        position: static;
+        display: none;
+        margin: 10px 20px;
+        padding: 10px 0;
+        z-index: 99;
+        opacity: 1;
+        visibility: visible;
+        background: #fff;
+        box-shadow: 0px 0px 30px rgba(127, 137, 161, 0.25);
+    }
+
+    .navbar-mobile .dropdown ul li {
+        min-width: 200px;
+    }
+
+    .navbar-mobile .dropdown ul a {
+        padding: 10px 20px;
+    }
+
+    .navbar-mobile .dropdown ul a i {
+        font-size: 12px;
+    }
+
+    .navbar-mobile .dropdown ul a:hover,
+    .navbar-mobile .dropdown ul .active:hover,
+    .navbar-mobile .dropdown ul li:hover>a {
+        color: #94c045;
+    }
+
+    .navbar-mobile .dropdown>.dropdown-active {
+        display: block;
+    }
+
+    #searchText {
+        padding: 10px;
+        border: none;
+        border-radius: 25px;
+        background-color: #F1F1F1;
+        outline: none;
+        width: 90%;
+    }
+    #searchText:focus {
+        background-color: #e0e0e0;
+    }
+
+    .search-input {
+        margin-top: -3px;  /* 이 값을 조정하여 원하는 위치로 이동시킬 수 있습니다. */
+        margin-left: 16%;
+    }
+
+    .search-input input::placeholder {
+        color: #C6C6C6;
+    }
+    ul.menu > li {
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    /* 로그아웃 아이콘 및 텍스트 위치 왼쪽으로 40px 이동 (따라서 화면상에서는 오른쪽으로 보임) */
+    .navbar ul li:first-child a {
+        margin-left: 12%; /* 원하는 간격에 따라 값을 조절하세요 */
+    }
+
+    .custom-logo {
+        margin-left: 35%;
+    }
+
+    a {
+        color: #94c045;
+        text-decoration: none;
+    }
+
+    a:hover {
+        color: #aacd6b;
+        text-decoration: none;
+    }
+
+
+</style>
+
+<body>
+
+<header id="header" class="fixed-top">
+    <div class="container" style="padding-top: 0.3%;">
+        <div class="row align-items-center">
+            <div class="col-3">
+                <a href="index.html" class="logo custom-logo"><img src="/images/logo.png" alt="Logo" class="img-fluid custom-logo-img" style="padding-right: 3%"></a>
+            </div>
+            <div class="col-5">
+                <div class="search-input">
+                    <form id="search" action="#">
+                        <input type="text" placeholder="검색어를 입력해주세요.🔍︎" id="searchText" name="searchKeyword" style="font-size: 15px; padding-top: 1%">
+                    </form>
+                </div>
+            </div>
+            <div class="col-4">
+                <nav id="navbar" class="navbar">
+                    <ul class="d-flex justify-content-end align-items-center">
+                        <a href="" ><li style="font-size: 25px">
+                            🔔
+                        </li></a>
+                        <li>
+                            <a href="/user/logout" style="font-size: 17px; color: #58A581; margin-right: -13px; text-decoration: none;">로그아웃</a>
+                        </li>
+                        <li>
+                            <a class="getstarted" href="index.html" style="font-size: 17px; text-decoration: none;">마이페이지</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- 바디 영역 -->
+<div class="body">
+    <div class="left-body">
+        <div class="feed-box"  style="background-color: #fff; border-radius: 4%; width: 90%;">
+            <div class="profile">
+                <div class="profile-img-box">
+                    <img class="profile-img"
+                         src="/images/profile1.jpg">
+                </div>
+                <div class="profile-id">
+                    [[${rDTO.reg_id}]]
+                </div>
+            </div>
+
+            <div id="slider">
+                <a href="#" class="control_next">></a>
+                <a href="#" class="control_prev"><</a>
+                <ul style="width: 1800px; margin-left: -450px;">
+                    <li>
+                        <img th:src="${rDTO.img_path}">
+                    </li>
+                    <li style="background: #aaa;">
+                        <img th:src="${rDTO.img_path}">
+                    </li>
+                    <li>
+                        <div class="feed-img">
+                            <img th:src="${rDTO.img_path}">
+                        </div>
+                    </li>
+                    <li style="background: #aaa;">
+                        <img th:src="${rDTO.img_path}">
+                    </li>
+                </ul>
+            </div>
+
+            <div class="icon">
+                <div>
+                    <span class="material-icons-outlined"><button id="Like_up" style="border:none; background: none;">favorite</button></span>
+                    <span class="material-icons-outlined">chat_bubble_outline</span>
+                    <span class="material-icons-outlined">send</span>
+                </div>
+                <div>
+                    <span class="material-icons-outlined"><button id="BookMark" style="border:none; background: none;">bookmark_border</button></span>
+                </div>
+            </div>
+
+            <div class="feed-text">
+                <b>[[${rDTO.reg_id}]]</b>&nbsp;&nbsp;[[${rDTO.contents}]]
+            </div>
+            &nbsp;&nbsp;[[${rDTO.like_cnt}]]&nbsp;명이 좋아요를 눌렀습니다.
+            <div class="comment">
+                <div> <img src="/images/nft6.jpg" style="width: 40px; height: 40px; border-radius: 100%"> <b>사용자 1</b> 페퍼민트 화이팅 </div>
+                <div> <img src="/images/nft7.jpg" style="width: 40px; height: 40px; border-radius: 100%"> <b>사용자 2</b> 뭐라도 하면 괜찮아 </div>
+                <div> <img src="/images/nft8.jpg" style="width: 40px; height: 40px; border-radius: 100%"> <b>사용자 3</b> 마라탕 먹자 </div>
+            </div>
+
+            <div class="input-comment"><br>
+              <input id="input-comment" type="text" class="form-control" placeholder="댓글을 입력하세요" style="width: 100%;"><br>&nbsp
+                <button type="submit" style="background-color: #ACEDCEFF; font-size: 17px; border: none;  width: 12%; height: 32px; border-radius: 50px; padding: 3px 2px; position: relative; top: -10px; margin-bottom: 20px;">전송</button>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+        -->
+</div>
+</body>
+
+</html>

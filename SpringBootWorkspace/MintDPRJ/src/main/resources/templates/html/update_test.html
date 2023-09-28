@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>이미지로 작성</title>
+  <script type="text/javascript">
+    function changeImage(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+          let imageThumbnail = document.getElementById('imageThumbnail');
+          imageThumbnail.src = e.target.result;
+          imageThumbnail.style.width = '300px';
+          imageThumbnail.style.height = '300px';
+
+          // imageElement.style.width = '300px';
+          // imageElement.style.height = '300px';
+        }
+
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+  </script>
+  <style>
+    @font-face {
+      font-family: 'Nanum Square';
+      src: url('NanumSquareB.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    body, h1, h2, h3, h4, h5, h6, p, a {
+      font-family: 'Nanum Square', sans-serif;
+    }
+
+    body {
+      align-items: center;
+      margin: 0 auto; width: 480px;
+      margin-top: 50px;
+    }
+
+    #one p {
+      font-size: 23px;
+      margin-left: 135px;
+      position: relative;
+      top: 110px;
+      right: 4px;
+      color: #58A581;
+      font-weight: lighter;
+    }
+
+    #two p {
+      font-size: 26px;
+      margin-left: 108px;
+      position: relative;
+      top: 93px;
+      left: 8px;
+      color: #58A581;
+      font-weight: lighter;
+    }
+
+
+  </style>
+</head>
+<body>
+<div id="one"><p>오늘하루는 어떠셨나요?</p></div>
+<div id="two"><p>이미지로 표현해 주세요.</p></div>
+<!-- 사진을 넣는 것 자체(인풋태그)로 함수 호출이 가능한가? 아 아니다 이거는 폼태그 전송으로 함수 호출하는 거다 -->
+<form action="/diary/updateDiary" method="post" enctype="multipart/form-data"> <!-- 인코딩 타입 -->
+  <div id="fix" style="width: 350px; height: 350px; position: relative; top: 85px; left: 90px; padding-bottom: 10%; "><label for=photo_select>
+    <img src="/images/file_upload.png" id="imageThumbnail" alt="이미지 업로드 미리보기" style="width: 300px; height: 300px; margin: auto; object-fit: cover; overflow: hidden;">
+    <input type="file" id="photo_select" name="file"  accept="image/*"  onchange="changeImage(this)" style="position: absolute; top: 200px; left: 200px; opacity: 0; width: 100px; height: 100px;">
+  </label></div>
+  <input type="text" style="width: 300px; height: 50px; border: 1px solid #58A581; margin-left: 90px;">
+  <input type="text" name="contents" id="contents" style="width: 300px; height: 50px; border: 1px solid #58A581; margin-left: 90px;">
+  <input type="text" style="width: 300px; height: 50px; border: 1px solid #58A581; margin-left: 90px;">
+  <input type="submit" value="완료" style="color: #58A581; width: 125px; height:38px;  border-radius: 25px; border: 2px solid #ACEDCE; font-size: 20px; padding: 3px 2px; text-align: center; cursor: pointer; position: relative; top: 30px; left: 180px; background-color: #ACEDCE; box-shadow: 3px 3px 3px #C2C2C2;">
+</form>
+
+</body>
+</html>

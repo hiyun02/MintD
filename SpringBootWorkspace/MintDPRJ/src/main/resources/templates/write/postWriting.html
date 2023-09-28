@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Mint D</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<script src="/assets/js/jquery-3.6.0.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+
+  @font-face {
+    font-family: 'NIXGONM-Vb'; !important;
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/NIXGONM-Vb.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  *{
+    font-family: 'NIXGONM-Vb';
+  }
+
+
+  :root {
+    /* Base font size */
+    font-size: 10px;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  body {
+    min-height: 100vh;
+    background-color: #fafafa;
+  }
+
+  .container {
+    max-width: 100rem;
+    margin: 0 auto;
+    padding: 0 2rem 2rem;
+  }
+
+  .heading span {
+    display: block;
+  }
+
+  .gallery {
+    display: flex;
+    flex-wrap: wrap;
+    /* Compensate for excess margin on outer gallery flex items */
+    margin: -1rem -1rem;
+  }
+
+  .gallery-item {
+    /* Minimum width of 24rem and grow to fit available space */
+    flex: 1 0 24rem;
+    /* Margin value should be half of grid-gap value as margins on flex items don't collapse */
+    margin: 1rem;
+    box-shadow: 0.3rem 0.4rem 0.4rem rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+  }
+
+  .gallery-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 400ms ease-out;
+  }
+
+  .gallery-image:hover {
+    transform: scale(1.15);
+  }
+
+  /*
+
+  The following rule will only run if your browser supports CSS grid.
+
+  Remove or comment-out the code block below to see how the browser will fall-back to flexbox styling.
+
+  */
+
+  @supports (display: grid) {
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+      grid-gap: 2rem;
+    }
+
+    .gallery,
+    .gallery-item {
+      margin: 0;
+    }
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0px;
+  }
+  .dropdown-submenu {
+    position: relative;
+  }
+
+  .dropdown-submenu a::after {
+    transform: rotate(-90deg);
+    position: absolute;
+    right: 6px;
+    top: .8em;
+  }
+
+  .dropdown-submenu .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-left: .1rem;
+    margin-right: .1rem;
+  }
+
+  /*--------------------------------------------------------------
+  # Header
+  --------------------------------------------------------------*/
+  #header {
+    height: 70px;
+    z-index: 997;
+    transition: all 0.5s ease-in-out;
+    background: #fff;
+    box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  #header .logo h1 {
+    font-size: 28px;
+    margin: 0;
+    line-height: 0;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+
+  #header .logo h1 a,
+  #header .logo h1 a:hover {
+    color: #3c4133;
+    text-decoration: none;
+  }
+
+  #header .logo img {
+    padding: 0;
+    margin: 0;
+    max-height: 40px;
+  }
+
+  /*--------------------------------------------------------------
+  # Navigation Menu
+  --------------------------------------------------------------*/
+  /**
+  * Desktop Navigation
+  */
+  .navbar {
+    padding: 0;
+  }
+
+  .navbar ul {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    list-style: none;
+    align-items: center;
+  }
+
+  .navbar li {
+    position: relative;
+  }
+
+  .navbar a,
+  .navbar a:focus {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0 10px 30px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #565e49;
+    white-space: nowrap;
+    transition: 0.3s;
+  }
+
+  .navbar a i,
+  .navbar a:focus i {
+    font-size: 12px;
+    line-height: 0;
+    margin-left: 5px;
+  }
+
+  .navbar a:hover,
+  .navbar .active,
+  .navbar .active:focus,
+  .navbar li:hover>a {
+    color: #94c045;
+  }
+
+  .navbar .getstarted,
+  .navbar .getstarted:focus {
+    background: #58A581;
+    padding: 8px 20px;
+    margin-left: 30px;
+    border-radius: 50px;
+    color: #fff;
+  }
+
+  .navbar .getstarted:hover,
+  .navbar .getstarted:focus:hover {
+    color: #fff;
+    background: #9fc658;
+  }
+
+  .navbar .dropdown ul {
+    display: block;
+    position: absolute;
+    left: 28px;
+    top: calc(100% + 30px);
+    margin: 0;
+    padding: 10px 0;
+    z-index: 99;
+    opacity: 0;
+    visibility: hidden;
+    background: #fff;
+    box-shadow: 0px 0px 30px rgba(127, 137, 161, 0.25);
+    transition: 0.3s;
+  }
+
+  .navbar .dropdown ul li {
+    min-width: 200px;
+  }
+
+  .navbar .dropdown ul a {
+    padding: 10px 20px;
+    font-size: 15px;
+    text-transform: none;
+  }
+
+  .navbar .dropdown ul a i {
+    font-size: 12px;
+  }
+
+  .navbar .dropdown ul a:hover,
+  .navbar .dropdown ul .active:hover,
+  .navbar .dropdown ul li:hover>a {
+    color: #94c045;
+  }
+
+  .navbar .dropdown:hover>ul {
+    opacity: 1;
+    top: 100%;
+    visibility: visible;
+  }
+
+  .navbar .dropdown .dropdown ul {
+    top: 0;
+    left: calc(100% - 30px);
+    visibility: hidden;
+  }
+
+  .navbar .dropdown .dropdown:hover>ul {
+    opacity: 1;
+    top: 0;
+    left: 100%;
+    visibility: visible;
+  }
+
+  @media (max-width: 1366px) {
+    .navbar .dropdown .dropdown ul {
+      left: -90%;
+    }
+
+    .navbar .dropdown .dropdown:hover>ul {
+      left: -100%;
+    }
+  }
+
+  /**
+  * Mobile Navigation
+  */
+  .mobile-nav-toggle {
+    color: #3c4133;
+    font-size: 28px;
+    cursor: pointer;
+    display: none;
+    line-height: 0;
+    transition: 0.5s;
+  }
+
+  .mobile-nav-toggle.bi-x {
+    color: #fff;
+  }
+
+  @media (max-width: 991px) {
+    .mobile-nav-toggle {
+      display: block;
+    }
+
+    .navbar ul {
+      display: none;
+    }
+  }
+
+  .navbar-mobile {
+    position: fixed;
+    overflow: hidden;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background: rgba(34, 36, 29, 0.9);
+    transition: 0.3s;
+    z-index: 999;
+  }
+
+  .navbar-mobile .mobile-nav-toggle {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+  }
+
+  .navbar-mobile ul {
+    display: block;
+    position: absolute;
+    top: 55px;
+    right: 15px;
+    bottom: 15px;
+    left: 15px;
+    padding: 10px 0;
+    background-color: #fff;
+    overflow-y: auto;
+    transition: 0.3s;
+  }
+
+  .navbar-mobile a,
+  .navbar-mobile a:focus {
+    padding: 10px 20px;
+    font-size: 15px;
+    color: #3c4133;
+  }
+
+  .navbar-mobile a:hover,
+  .navbar-mobile .active,
+  .navbar-mobile li:hover>a {
+    color: #94c045;
+  }
+
+  .navbar-mobile .getstarted,
+  .navbar-mobile .getstarted:focus {
+    margin: 15px;
+  }
+
+  .navbar-mobile .dropdown ul {
+    position: static;
+    display: none;
+    margin: 10px 20px;
+    padding: 10px 0;
+    z-index: 99;
+    opacity: 1;
+    visibility: visible;
+    background: #fff;
+    box-shadow: 0px 0px 30px rgba(127, 137, 161, 0.25);
+  }
+
+  .navbar-mobile .dropdown ul li {
+    min-width: 200px;
+  }
+
+  .navbar-mobile .dropdown ul a {
+    padding: 10px 20px;
+  }
+
+  .navbar-mobile .dropdown ul a i {
+    font-size: 12px;
+  }
+
+  .navbar-mobile .dropdown ul a:hover,
+  .navbar-mobile .dropdown ul .active:hover,
+  .navbar-mobile .dropdown ul li:hover>a {
+    color: #94c045;
+  }
+
+  .navbar-mobile .dropdown>.dropdown-active {
+    display: block;
+  }
+
+  #searchText {
+    padding: 10px;
+    border: none;
+    border-radius: 25px;
+    background-color: #F1F1F1;
+    outline: none;
+    width: 90%;
+  }
+  #searchText:focus {
+    background-color: #e0e0e0;
+  }
+
+  .search-input {
+    margin-top: -3px;  /* 이 값을 조정하여 원하는 위치로 이동시킬 수 있습니다. */
+    margin-left: 16%;
+  }
+
+  .search-input input::placeholder {
+    color: #C6C6C6;
+  }
+  ul.menu > li {
+    display: inline-block;
+    margin-right: 10px;
+  }
+
+  /* 로그아웃 아이콘 및 텍스트 위치 왼쪽으로 40px 이동 (따라서 화면상에서는 오른쪽으로 보임) */
+  .navbar ul li:first-child a {
+    margin-left: 12%; /* 원하는 간격에 따라 값을 조절하세요 */
+  }
+
+  .custom-logo {
+    margin-left: 35%;
+  }
+
+  a {
+    color: #8a8a8a;
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: #58A581;
+    text-decoration: none;
+  }
+
+  @import url(https://fonts.googleapis.com/css?family=Lato:100,300,400);
+
+  input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+    color: #aca49c;
+    font-size: 0.875em;
+  }
+
+  input:focus::-webkit-input-placeholder, textarea:focus::-webkit-input-placeholder {
+    color: #bbb5af;
+  }
+
+  input::-moz-placeholder, textarea::-moz-placeholder {
+    color: #aca49c;
+    font-size: 0.875em;
+  }
+
+  input:focus::-moz-placeholder, textarea:focus::-moz-placeholder {
+    color: #bbb5af;
+  }
+
+  input::placeholder, textarea::placeholder {
+    color: #aca49c;
+    font-size: 0.875em;
+  }
+
+  input:focus::placeholder, textarea::focus:placeholder {
+    color: #bbb5af;
+  }
+
+  input::-ms-placeholder, textarea::-ms-placeholder {
+    color: #aca49c;
+    font-size: 0.875em;
+  }
+
+  input:focus::-ms-placeholder, textarea:focus::-ms-placeholder {
+    color: #bbb5af;
+  }
+
+  /* on hover placeholder */
+
+  input:hover::-webkit-input-placeholder, textarea:hover::-webkit-input-placeholder {
+    color: #e2dedb;
+    font-size: 0.875em;
+  }
+
+  input:hover:focus::-webkit-input-placeholder, textarea:hover:focus::-webkit-input-placeholder {
+    color: #cbc6c1;
+  }
+
+  input:hover::-moz-placeholder, textarea:hover::-moz-placeholder {
+    color: #e2dedb;
+    font-size: 0.875em;
+  }
+
+  input:hover:focus::-moz-placeholder, textarea:hover:focus::-moz-placeholder {
+    color: #cbc6c1;
+  }
+
+  input:hover::placeholder, textarea:hover::placeholder {
+    color: #e2dedb;
+    font-size: 0.875em;
+  }
+
+  input:hover:focus::placeholder, textarea:hover:focus::placeholder {
+    color: #cbc6c1;
+  }
+
+  input:hover::placeholder, textarea:hover::placeholder {
+    color: #fff;
+    font-size: 0.875em;
+  }
+
+  input:hover:focus::-ms-placeholder, textarea:hover::focus:-ms-placeholder {
+    color: #58A581;
+  }
+
+  body {
+    background: #eefff5;
+    color: #58A581;
+  }
+
+  * {margin: 0; padding: 0; box-sizing: border-box;}
+  body {background: #f6f6f6; color: #444; font-size: 20px; line-height: 1;}
+  .container {max-width: 1100px; padding: 0 20px; margin:0 auto;}
+  .panel {margin: 50px auto 40px; max-width: 500px; text-align: center; padding-bottom: 5%;}
+  .button_outer {background: #58A581; border-radius:30px; text-align: center; height: 50px; width: 200px; display: inline-block; transition: .2s; position: relative; overflow: hidden;}
+  .btn_upload {padding: 17px 30px 12px; color: #fff; text-align: center; position: relative; display: inline-block; overflow: hidden; z-index: 3; white-space: nowrap;}
+  .btn_upload input {position: absolute; width: 100%; left: 0; top: 0; width: 100%; height: 105%; cursor: pointer; opacity: 0;}
+  .file_uploading {width: 100%; height: 10px; margin-top: 20px; background: #ccc;}
+  .file_uploading .btn_upload {display: none;}
+  .processing_bar {position: absolute; left: 0; top: 0; width: 0; height: 100%; border-radius: 30px; background:#58A581; transition: 3s;}
+  .file_uploading .processing_bar {width: 100%;}
+  .success_box {display: none; width: 50px; height: 50px; position: relative;}
+  .success_box:before {content: ''; display: block; width: 9px; height: 18px; border-bottom: 6px solid #fff; border-right: 6px solid #fff; -webkit-transform:rotate(45deg); -moz-transform:rotate(45deg); -ms-transform:rotate(45deg); transform:rotate(45deg); position: absolute; left: 17px; top: 10px;}
+  .file_uploaded .success_box {display: inline-block;}
+  .file_uploaded {margin-top: 0; width: 50px; background:#58A581; height: 50px;}
+  .uploaded_file_view {max-width: 300px; margin: 40px auto; text-align: center; position: relative; transition: .2s; opacity: 0; border: 2px solid #ddd; padding: 15px;}
+  .file_remove{width: 30px; height: 30px; border-radius: 50%; display: block; position: absolute; background: #aaa; line-height: 30px; color: #fff; font-size: 12px; cursor: pointer; right: -15px; top: -15px;}
+  .file_remove:hover {background: #222; transition: .2s;}
+  .uploaded_file_view img {max-width: 100%;}
+  .uploaded_file_view.show {opacity: 1;}
+  .error_msg {text-align: center; color: #f00}
+  #form {
+    position: relative;
+    width: 500px;
+    margin: 50px auto 100px auto;
+    height: 600px;
+  }
+
+  input {
+    font-size: 0.875em;
+    width: 470px;
+    height: 50px;
+    padding: 0px 15px 0px 15px;
+
+    background: transparent;
+    outline: none;
+    color: #fff;
+
+    border: solid 1px #58A581;
+    border-bottom: none;
+
+    transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+  }
+
+  input:hover {
+    background: #58A581;
+    color: #fff;
+  }
+
+  textarea {
+    width: 470px;
+    max-width: 470px;
+    height: 310px;
+    max-height: 310px;
+    padding: 15px;
+
+    background: transparent;
+    outline: none;
+
+    font-size: 0.875em;
+
+    border: solid 1px #58A581;
+
+    transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+  }
+
+  textarea:hover {
+    background: #58A581;
+    color: #fff;
+  }
+
+  #submit {
+    width: 502px;
+
+    padding: 0;
+    margin: -5px 0px 0px 0px;
+    font-size: 0.875em;
+    color: #58A581;
+
+    outline:none;
+    cursor: pointer;
+
+    border: solid 1px #58A581;
+    border-top: none;
+  }
+
+  #submit:hover {
+    color: #e2dedb;
+  }
+</style>
+<script src="/assets/js/uploadJs.js"></script>
+<header id="header" class="fixed-top">
+    <div class="container" style="padding-top: 0.5%;">
+        <div class="row align-items-center">
+            <div class="col-3">
+                <a href="index.html" class="logo custom-logo"><img src="/assets/img/logo.png" alt="Logo" class="img-fluid custom-logo-img" style="padding-right: 3%"></a>
+            </div>
+            <div class="col-5">
+                <div class="search-input">
+                    <form id="search" action="#">
+                        <input type="text" placeholder="검색어를 입력해주세요.🔍︎" id="searchText" name="searchKeyword" style="font-size: 15px;">
+                    </form>
+                </div>
+            </div>
+            <div class="col-4">
+                <nav id="navbar" class="navbar">
+                    <ul class="d-flex justify-content-end align-items-center">
+                        <a href="" ><li style="font-size: 25px">
+                            🔔
+                        </li></a>
+                        <li>
+                            <a href="/user/logout" style="font-size: 17px; color: #58A581; margin-right: -13px; text-decoration: none;">로그아웃</a>
+                        </li>
+                        <!--                        <li>-->
+                        <!--                            <a href="#" style="font-size: 17px; color: #58A581; margin-right: -13px; text-decoration: none;">기록하기</a>-->
+                        <!--                        </li>-->
+                        <li>
+                            <a class="getstarted" href="index.html" style="font-size: 17px; text-decoration: none;">기록하기</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+<br><br><br><br><br><br>
+<h1 style="text-align: center; padding-top: 1%; color: #58A581;">게시물 작성하기</h1>
+<form id="form" class="topBefore" style="padding-left: 1%;">
+ <!-- <input id="name" type="text" placeholder="NAME">-->
+  <div><img src="/images/result1.jpg"></div>
+  <textarea id="message" type="text" placeholder="텍스트를 입력하세요." style="height: 100px;"></textarea>
+  <input id="submit" onclick="swal('')" type="submit" value="작성" style="width: 470px;">
+</form>
+
+</html>

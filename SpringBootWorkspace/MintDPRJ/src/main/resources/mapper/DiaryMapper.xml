@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kopo.poly.persistance.mapper.IDiaryMapper">
+
+    <!-- 게시물 리스트 가져오기 -->
+    <select id="getDiaryList" resultType="DiaryDTO">
+        SELECT DIARY_SEQ, LIKE_CNT, READ_CNT, IMG_PATH, NFT_YN, CONTENTS, READ_CNT,
+               TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT
+        FROM DIARY
+        ORDER BY DIARY_SEQ, REG_DT DESC
+    </select>
+
+    <!-- NFT 다이어리 리스트 가져오기 -->
+    <select id="getNFTDiaryList" parameterType="DiaryDTO" resultType="DiaryDTO">
+        SELECT DIARY_SEQ, LIKE_CNT, READ_CNT, IMG_PATH, NFT_YN, CONTENTS, READ_CNT,
+               TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT
+        FROM DIARY
+        WHERE NFT_YN = 'Y'
+        ORDER BY DIARY_SEQ, REG_DT DESC
+    </select>
+
+    <!-- 나의 게시물 리스트 가져오기(로그인한 상태일 때) -->
+    <select id="getMyDiaryList" resultType="DiaryDTO">
+        SELECT DIARY_SEQ, LIKE_CNT, READ_CNT, IMG_PATH, NFT_YN, CONTENTS, READ_CNT,
+               TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT
+        FROM DIARY
+        WHERE REG_ID = #{reg_id}
+        ORDER BY DIARY_SEQ, REG_DT DESC
+    </select>
+
+    <select id="getMyDiaryCnt" resultType="DiaryDTO" parameterType="DiaryDTO">
+        SELECT COUNT(*) AS DIARY_CNT
+        FROM DIARY
+        WHERE REG_ID = #{reg_id}
+    </select>
+
+    <!-- 게시물 추가하기 -->
+    <insert id="insertDiaryInfo" parameterType="DiaryDTO">
+        INSERT INTO DIARY
+        (
+            DIARY_SEQ, IMG_PATH,  NFT_YN, PUBLIC_YN, CONTENTS, LIKE_CNT, READ_CNT,
+            REG_ID, REG_DT, CHG_ID, CHG_DT
+        )
+        VALUES (
+                       (SELECT NVL(MAX(A.DIARY_SEQ),0)+1 FROM DIARY A),
+                       #{img_path}, default, default, #{contents}, 0, 0, #{reg_id}, SYSDATE(), #{reg_id}, SYSDATE()
+               )
+    </insert>
+
+    <!-- 게시물 상세보기 -->
+    <select id="getDiaryInfo" resultType="DiaryDTO">
+        SELECT DIARY_SEQ, REG_ID, LIKE_CNT, READ_CNT, NFT_YN, CONTENTS, IMG_PATH,
+               TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT
+        FROM DIARY
+        WHERE DIARY_SEQ = #{diary_seq}
+    </select>
+
+    <!-- 북마크 여부 조회(유저 아이디와 다이어리 시퀀스 키 둘 다 만족) -->
+    <select id="getBookMarkExists" parameterType="DiaryDTO" resultType="String">
+        SELECT
+            CASE WHEN COUNT(1) = 0 THEN 'N' ELSE 'Y' END AS BOOKMARK_YN
+        FROM BOOKMARK
+        WHERE USER_ID = #{reg_id} AND DIARY_SEQ = #{diary_seq};
+    </select>
+
+    <!-- 북마크 리스트 가져오기 전 데이터 조회 -->
+    <select id="getBookMarkFind" parameterType="DiaryDTO" resultType="DiaryDTO">
+        SELECT DIARY_SEQ
+        FROM BOOKMARK
+        WHERE USER_ID = #{reg_id}
+        ORDER BY BOOKMARK_SEQ DESC
+    </select>
+
+    <!-- 북마크 리스트 가져오기 -->
+    <select id="getBookMarkList" parameterType="DiaryDTO" resultType="DiaryDTO">
+        SELECT DIARY_SEQ, IMG_PATH
+        FROM DIARY
+        WHERE DIARY_SEQ = #{diary_seq}
+    </select>
+
+    <!-- 게시물 삭제하기 -->
+    <delete id="deleteDiaryInfo" parameterType="DiaryDTO">
+        DELETE FROM DIARY
+        WHERE
+            DIARY_SEQ = #{diary_seq}
+    </delete>
+
+    <!-- @@@ 게시물 수정하기 이건 나중에 추가할 거니까 일단은 그냥 두면 됨 -->
+    <update id="updateDiaryInfo" parameterType="DiaryDTO">
+        UPDATE DIARY SET
+                         CONTENTS = #{contents},
+                         CHG_DT = SYSDATE()
+        WHERE
+            DIARY_SEQ = #{diary_seq}
+    </update>
+
+    <!-- 조회수 증가 -->
+    <update id="updateDiaryReadCnt" parameterType="DiaryDTO">
+        UPDATE DIARY SET
+            READ_CNT = READ_CNT + 1
+        WHERE
+            DIARY_SEQ = #{diary_seq}
+    </update>
+
+    <!-- 작성자 프로필 이미지 가져오기 -->
+    <select id="getProfilePath" parameterType="UserInfoDTO" resultType="UserInfoDTO">
+        SELECT PROFILE_PATH FROM USER_INFO
+            WHERE USER_ID = #{user_id}
+    </select>
+
+    <!-- 좋아요수 증가 -->
+    <update id="updateDiaryLikeCnt" parameterType="DiaryDTO">
+        UPDATE DIARY SET
+            LIKE_CNT = LIKE_CNT + 1
+        WHERE
+            DIARY_SEQ = #{diary_seq}
+    </update>
+
+    <!-- 북마크 추가하기 -->
+    <insert id="insertBookMark" parameterType="DiaryDTO">
+        INSERT INTO BOOKMARK
+        (
+            BOOKMARK_SEQ, DIARY_SEQ, USER_ID
+        )
+        VALUES (
+                (SELECT NVL(MAX(A.BOOKMARK_SEQ),0)+1 FROM BOOKMARK A),
+                #{diary_seq}, (SELECT USER_ID FROM USER_INFO WHERE USER_ID = #{reg_id})
+               )
+    </insert>
+
+    <!-- 검색 페이지 가져오기 -->
+    <select id="getSearchFeed" resultType="DiaryDTO">
+        SELECT DIARY_SEQ, LIKE_CNT, READ_CNT, IMG_PATH, NFT_YN, CONTENTS, READ_CNT,
+               TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT
+        FROM DIARY
+        ORDER BY DIARY_SEQ, REG_DT DESC
+    </select>
+
+    <!-- 검색 페이지 인기순으로 정렬해서 가져오기 -->
+    <select id="getSortByPopularity" resultType="DiaryDTO">
+        SELECT DIARY_SEQ, LIKE_CNT, READ_CNT, IMG_PATH, NFT_YN, CONTENTS, READ_CNT,
+               TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT
+        FROM DIARY
+        ORDER BY LIKE_CNT DESC
+    </select>
+
+    <!-- 검색 페이지 최신순으로 정렬해서 가져오기 -->
+    <select id="getSortByDate" resultType="DiaryDTO">
+        SELECT DIARY_SEQ, LIKE_CNT, READ_CNT, IMG_PATH, NFT_YN, CONTENTS, READ_CNT,
+               TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT
+        FROM DIARY
+        ORDER BY REG_DT DESC
+    </select>
+
+    <!-- 검색 페이지 조회수순으로 정렬해서 가져오기 -->
+    <select id="getSortByViewCount" resultType="DiaryDTO">
+        SELECT DIARY_SEQ, LIKE_CNT, READ_CNT, IMG_PATH, NFT_YN, CONTENTS, READ_CNT,
+               TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT
+        FROM DIARY
+        ORDER BY READ_CNT DESC
+    </select>
+
+</mapper>

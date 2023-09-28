@@ -1,0 +1,813 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Mint D | 음성인식</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link href="./assets/css/style.css">
+</head>
+<script>
+  <script>
+    (function($) {
+
+    var cache = {};
+
+    this.tmpl = function tmpl(str, data){
+    // Figure out if we're getting a template, or if we need to
+    // load the template - and be sure to cache the result.
+    var fn = !/\W/.test(str) ?
+    cache[str] = cache[str] ||
+    tmpl(document.getElementById(str).innerHTML) :
+
+    // Generate a reusable function that will serve as a template
+    // generator (and which will be cached).
+    new Function("obj",
+    "var p=[],print=function(){p.push.apply(p,arguments);};" +
+
+    // Introduce the data as local variables using with(){}
+    "with(obj){p.push('" +
+
+    // Convert the template into pure JavaScript
+    str
+    .replace(/[\r\t\n]/g, " ")
+    .split("<%").join("\t")
+    .replace(/((^|%>)[^\t]*)'/g, "$1\r")
+    .replace(/\t=(.*?)%>/g, "',$1,'")
+    .split("\t").join("');")
+    .split("%>").join("p.push('")
+    .split("\r").join("\\'")
+    + "');}return p.join('');");
+
+    // Provide some basic currying to the user
+    return data ? fn( data ) : fn;
+  };
+
+  })(jQuery);
+
+    (function($) {
+
+    $(document).ready(function() {
+
+      var tweetTemplate = $('#tweetTemplate').html(),
+              $timeline = $('.timeline'),
+              $commentForm = $('.comment-box'),
+              $messageField = $('.comment-box input[name="message"]');
+
+      $commentForm.on('submit', function(e){
+        e.preventDefault();
+
+        var tweetData = {
+          avatar_url: '//www.artifacting.com/blog/wp-content/uploads/2010/11/Gollum.jpg',
+          handle: 'some_twitter_handle',
+          name: 'The Users Name',
+          message: $messageField.val()
+        };
+
+        var markup = tmpl(tweetTemplate, tweetData);
+
+        $timeline.prepend(markup);
+        $messageField.val('');
+      });
+
+    });
+
+  })(jQuery);
+</script>
+
+</script>
+<style>
+
+  @font-face {
+    font-family: 'NIXGONM-Vb'; !important;
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/NIXGONM-Vb.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  *{
+    font-family: 'NIXGONM-Vb';
+  }
+
+
+  :root {
+    /* Base font size */
+    font-size: 10px;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  body {
+    min-height: 100vh;
+    background-color: #fafafa;
+  }
+
+  .container {
+    max-width: 100rem;
+    margin: 0 auto;
+    padding: 0 2rem 2rem;
+  }
+
+  .heading span {
+    display: block;
+  }
+
+  .gallery {
+    display: flex;
+    flex-wrap: wrap;
+    /* Compensate for excess margin on outer gallery flex items */
+    margin: -1rem -1rem;
+  }
+
+  .gallery-item {
+    /* Minimum width of 24rem and grow to fit available space */
+    flex: 1 0 24rem;
+    /* Margin value should be half of grid-gap value as margins on flex items don't collapse */
+    margin: auto;
+    overflow: hidden;
+  }
+
+  .gallery-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 400ms ease-out;
+  }
+
+  .gallery-image:hover {
+    transform: scale(1.15);
+  }
+
+  /*
+
+  The following rule will only run if your browser supports CSS grid.
+
+  Remove or comment-out the code block below to see how the browser will fall-back to flexbox styling.
+
+  */
+
+  @supports (display: grid) {
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+      grid-gap: 2rem;
+    }
+
+    .gallery,
+    .gallery-item {
+      margin: 0;
+    }
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0px;
+  }
+  .dropdown-submenu {
+    position: relative;
+  }
+
+  .dropdown-submenu a::after {
+    transform: rotate(-90deg);
+    position: absolute;
+    right: 6px;
+    top: .8em;
+  }
+
+  .dropdown-submenu .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-left: .1rem;
+    margin-right: .1rem;
+  }
+
+  /*--------------------------------------------------------------
+  # Header
+  --------------------------------------------------------------*/
+  #header {
+    height: 70px;
+    z-index: 997;
+    transition: all 0.5s ease-in-out;
+    background: #fff;
+    box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  #header .logo h1 {
+    font-size: 28px;
+    margin: 0;
+    line-height: 0;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+
+  #header .logo h1 a,
+  #header .logo h1 a:hover {
+    color: #3c4133;
+    text-decoration: none;
+  }
+
+  #header .logo img {
+    padding: 0;
+    margin: 0;
+    max-height: 40px;
+  }
+
+  /*--------------------------------------------------------------
+  # Navigation Menu
+  --------------------------------------------------------------*/
+  /**
+  * Desktop Navigation
+  */
+  .navbar {
+    padding: 0;
+  }
+
+  .navbar ul {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    list-style: none;
+    align-items: center;
+  }
+
+  .navbar li {
+    position: relative;
+  }
+
+  .navbar a,
+  .navbar a:focus {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0 10px 30px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #565e49;
+    white-space: nowrap;
+    transition: 0.3s;
+  }
+
+  .navbar a i,
+  .navbar a:focus i {
+    font-size: 12px;
+    line-height: 0;
+    margin-left: 5px;
+  }
+
+  .navbar a:hover,
+  .navbar .active,
+  .navbar .active:focus,
+  .navbar li:hover>a {
+    color: #94c045;
+  }
+
+  .navbar .getstarted,
+  .navbar .getstarted:focus {
+    background: #58A581;
+    padding: 8px 20px;
+    margin-left: 30px;
+    border-radius: 50px;
+    color: #fff;
+  }
+
+  .navbar .getstarted:hover,
+  .navbar .getstarted:focus:hover {
+    color: #fff;
+    background: #9fc658;
+  }
+
+  .navbar .dropdown ul {
+    display: block;
+    position: absolute;
+    left: 28px;
+    top: calc(100% + 30px);
+    margin: 0;
+    padding: 10px 0;
+    z-index: 99;
+    opacity: 0;
+    visibility: hidden;
+    background: #fff;
+    box-shadow: 0px 0px 30px rgba(127, 137, 161, 0.25);
+    transition: 0.3s;
+  }
+
+  .navbar .dropdown ul li {
+    min-width: 200px;
+  }
+
+  .navbar .dropdown ul a {
+    padding: 10px 20px;
+    font-size: 15px;
+    text-transform: none;
+  }
+
+  .navbar .dropdown ul a i {
+    font-size: 12px;
+  }
+
+  .navbar .dropdown ul a:hover,
+  .navbar .dropdown ul .active:hover,
+  .navbar .dropdown ul li:hover>a {
+    color: #94c045;
+  }
+
+  .navbar .dropdown:hover>ul {
+    opacity: 1;
+    top: 100%;
+    visibility: visible;
+  }
+
+  .navbar .dropdown .dropdown ul {
+    top: 0;
+    left: calc(100% - 30px);
+    visibility: hidden;
+  }
+
+  .navbar .dropdown .dropdown:hover>ul {
+    opacity: 1;
+    top: 0;
+    left: 100%;
+    visibility: visible;
+  }
+
+  @media (max-width: 1366px) {
+    .navbar .dropdown .dropdown ul {
+      left: -90%;
+    }
+
+    .navbar .dropdown .dropdown:hover>ul {
+      left: -100%;
+    }
+  }
+
+  /**
+  * Mobile Navigation
+  */
+  .mobile-nav-toggle {
+    color: #3c4133;
+    font-size: 28px;
+    cursor: pointer;
+    display: none;
+    line-height: 0;
+    transition: 0.5s;
+  }
+
+  .mobile-nav-toggle.bi-x {
+    color: #fff;
+  }
+
+  @media (max-width: 991px) {
+    .mobile-nav-toggle {
+      display: block;
+    }
+
+    .navbar ul {
+      display: none;
+    }
+  }
+
+  .navbar-mobile {
+    position: fixed;
+    overflow: hidden;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background: rgba(34, 36, 29, 0.9);
+    transition: 0.3s;
+    z-index: 999;
+  }
+
+  .navbar-mobile .mobile-nav-toggle {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+  }
+
+  .navbar-mobile ul {
+    display: block;
+    position: absolute;
+    top: 55px;
+    right: 15px;
+    bottom: 15px;
+    left: 15px;
+    padding: 10px 0;
+    background-color: #fff;
+    overflow-y: auto;
+    transition: 0.3s;
+  }
+
+  .navbar-mobile a,
+  .navbar-mobile a:focus {
+    padding: 10px 20px;
+    font-size: 15px;
+    color: #3c4133;
+  }
+
+  .navbar-mobile a:hover,
+  .navbar-mobile .active,
+  .navbar-mobile li:hover>a {
+    color: #94c045;
+  }
+
+  .navbar-mobile .getstarted,
+  .navbar-mobile .getstarted:focus {
+    margin: 15px;
+  }
+
+  .navbar-mobile .dropdown ul {
+    position: static;
+    display: none;
+    margin: 10px 20px;
+    padding: 10px 0;
+    z-index: 99;
+    opacity: 1;
+    visibility: visible;
+    background: #fff;
+    box-shadow: 0px 0px 30px rgba(127, 137, 161, 0.25);
+  }
+
+  .navbar-mobile .dropdown ul li {
+    min-width: 200px;
+  }
+
+  .navbar-mobile .dropdown ul a {
+    padding: 10px 20px;
+  }
+
+  .navbar-mobile .dropdown ul a i {
+    font-size: 12px;
+  }
+
+  .navbar-mobile .dropdown ul a:hover,
+  .navbar-mobile .dropdown ul .active:hover,
+  .navbar-mobile .dropdown ul li:hover>a {
+    color: #94c045;
+  }
+
+  .navbar-mobile .dropdown>.dropdown-active {
+    display: block;
+  }
+
+  #searchText {
+    padding: 10px;
+    border: none;
+    border-radius: 25px;
+    background-color: #F1F1F1;
+    outline: none;
+    width: 90%;
+  }
+  #searchText:focus {
+    background-color: #e0e0e0;
+  }
+
+  .search-input {
+    margin-top: -3px;  /* 이 값을 조정하여 원하는 위치로 이동시킬 수 있습니다. */
+    margin-left: 16%;
+  }
+
+  .search-input input::placeholder {
+    color: #C6C6C6;
+  }
+  ul.menu > li {
+    display: inline-block;
+    margin-right: 10px;
+  }
+
+  /* 로그아웃 아이콘 및 텍스트 위치 왼쪽으로 40px 이동 (따라서 화면상에서는 오른쪽으로 보임) */
+  .navbar ul li:first-child a {
+    margin-left: 12%; /* 원하는 간격에 따라 값을 조절하세요 */
+  }
+
+  .custom-logo {
+    margin-left: 35%;
+  }
+
+  a {
+    color: #6e6e6e;
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: #6e6e6e;
+    text-decoration: none;
+  }
+  /*
+
+  All grid code is placed in a 'supports' rule (feature query) at the bottom of the CSS (Line 310).
+
+  The 'supports' rule will only run if your browser supports CSS grid.
+
+  Flexbox and floats are used as a fallback so that browsers which don't support grid will still recieve a similar layout.
+
+  */
+
+  /* Base Styles */
+
+  :root {
+    font-size: 10px;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: "Open Sans", Arial, sans-serif;
+    min-height: 100vh;
+    background-color: #fafafa;
+    color: #262626;
+    padding-bottom: 3rem;
+  }
+
+  img {
+    display: block;
+  }
+
+  .container {
+    max-width: 110.5rem;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+
+  /* Profile Section */
+
+
+  .profile-stats li {
+    display: inline-block;
+    font-size: 1.6rem;
+    line-height: 1.5;
+    margin-right: 4rem;
+    cursor: pointer;
+  }
+
+  .profile-stats li:last-of-type {
+    margin-right: 0;
+  }
+
+  /* Gallery Section */
+
+  .gallery {
+    display: flex;
+    flex-wrap: wrap;
+    margin: -1rem -1rem;
+    padding-bottom: 3rem;
+  }
+
+  .gallery-item {
+    position: relative;
+    flex: 1 0 22rem;
+    margin: 1rem;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .gallery-item:hover .gallery-item-info,
+  .gallery-item:focus .gallery-item-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+
+
+  .gallery-item-info li {
+    display: inline-block;
+    font-size: 1.7rem;
+    font-weight: 600;
+  }
+
+
+  /* Loader */
+
+  .loader {
+    width: 5rem;
+    height: 5rem;
+    border: 0.6rem solid #999;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    margin: 0 auto;
+    animation: loader 500ms linear infinite;
+  }
+
+  /* Media Query */
+
+  @media screen and (max-width: 40rem) {
+    .profile {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 4rem 0;
+    }
+
+    .profile::after {
+      display: none;
+    }
+
+    .profile-image,
+    .profile-user-settings,
+    .profile-bio,
+    .profile-stats {
+      float: none;
+      width: auto;
+    }
+
+    .profile-image img {
+      width: 7.7rem;
+    }
+
+
+    .profile-stats ul {
+      display: flex;
+      text-align: center;
+      padding: 1.2rem 0;
+      border-top: 0.1rem solid #dadada;
+      border-bottom: 0.1rem solid #dadada;
+    }
+
+    .profile-stats li {
+      font-size: 1.4rem;
+      flex: 1;
+      margin: 0;
+    }
+
+    .profile-stat-count {
+      display: block;
+    }
+  }
+
+  /* Spinner Animation */
+
+  @keyframes loader {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+
+  @supports (display: grid) {
+
+
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+      grid-gap: 2rem;
+    }
+
+    .gallery-item,
+    .gallery {
+      width: auto;
+      margin: 0;
+    }
+  }
+  .message2 p {
+    margin-top: 200px;
+    font-weight: 400;
+    color: #58A581;
+    text-decoration: none;
+    font-size: 40px;
+    text-align: center;
+    letter-spacing: -2px;
+    /* 자간 */
+
+  }
+
+  /* 입력 방식 선택 페이지 */
+  .form button a {
+    font-family: 'NIXGONM-Vb';
+    font-weight: 500;
+    color: #1C553A;
+    text-decoration: none;
+    font-size: 37px;
+    text-align: center;
+    letter-spacing: 1px;
+
+  }
+</style>
+<header id="header" class="fixed-top">
+  <div class="container" style="padding-top: 0.5%;">
+    <div class="row align-items-center">
+      <div class="col-3">
+        <a href="/diary/getMyDiaryList" class="logo custom-logo"><img src="/assets/img/logo.png" alt="Logo" class="img-fluid custom-logo-img" style="padding-right: 3%"></a>
+      </div>
+      <div class="col-5">
+        <div class="search-input">
+          <form id="search" action="#">
+            <input type="text" placeholder="검색어를 입력해주세요.🔍︎" id="searchText" name="searchKeyword" style="font-size: 15px;">
+          </form>
+        </div>
+      </div>
+      <div class="col-4">
+        <nav id="navbar" class="navbar">
+          <ul class="d-flex justify-content-end align-items-center">
+            <a href="" ><li style="font-size: 25px">
+              🔔
+            </li></a>
+            <li>
+              <a href="/user/logout" style="font-size: 17px; color: #58A581; margin-right: -13px; text-decoration: none;">로그아웃</a>
+            </li>
+            <!--                        <li>-->
+            <!--                            <a href="#" style="font-size: 17px; color: #58A581; margin-right: -13px; text-decoration: none;">기록하기</a>-->
+            <!--                        </li>-->
+            <li>
+              <a class="getstarted" href="index.html" style="font-size: 17px; text-decoration: none;">기록하기</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+<br><br><br><br><br>
+<body>
+
+<link rel="stylesheet" href="/assets/css/follow.css">
+
+<main class="main container"><br><br>
+  <h1 style="text-align: center; color: #58A581; font-family: NIXGONM-Vb;">팔로잉 목록</h1>
+  <div class="content">
+
+    <section class="timeline">
+
+      <article class="tweet">
+        <div class="tweet-side">
+          <img class="avatar" src="https://mintd-bucket.s3.ap-northeast-2.amazonaws.com/nft12.jpg  " alt="Batman">
+        </div>
+
+        <div class="tweet-body" onclick="location.href='/diary/getUserDiaryList?user_id=hayun'">
+          <span class="handle">hayun</span>
+          <p class="message">It's not who I am underneath, but what I do that defines me.</p>
+        </div>
+      </article>
+
+      <article class="tweet">
+        <div class="tweet-side">
+          <img class="avatar" src="https://mintd-bucket.s3.ap-northeast-2.amazonaws.com/nft3.jpg" alt="Batman">
+        </div>
+
+        <div class="tweet-body">
+          <span class="handle">youjin</span>
+          <p class="message">So be human all the time! Boop-boop-de-doop-oop!</p>
+        </div>
+      </article>
+
+      <article class="tweet">
+        <div class="tweet-side">
+          <img class="avatar" src="https://mintd-bucket.s3.ap-northeast-2.amazonaws.com/nft6.jpg" alt="Batman">
+        </div>
+
+        <div class="tweet-body">
+          <span class="haESndle">minjae</span>
+          <p class="message">I won't kill you, but I don't I have to save you.</p>
+        </div>
+      </article>
+
+      <article class="tweet">
+        <div class="tweet-side">
+          <img class="avatar" src="https://mintd-bucket.s3.ap-northeast-2.amazonaws.com/nft5.jpg" alt="Batman">
+        </div>
+
+        <div class="tweet-body">
+          <span class="handle">wujung</span>
+          <p class="message">There's a price on your head and I've come to collect.</p>
+        </div>
+      </article>
+
+  </div>
+</main>
+
+<script id="tweetTemplate" type="text/html">
+  <article class="tweet">
+    <div class="tweet-side">
+      <img class="avatar" src="<%= avatar_url %>" alt="<%= name %>">
+    </div>
+
+    <div class="tweet-body">
+      <span class="handle">@<%= handle %></span>
+      <p class="message"><%= message %></p>
+    </div>
+  </article>
+</script>
+
+<script src="//code.jquery.com/jquery-2.0.2.min.js"></script>
+<script src="js/helpers.js"></script>
+<script src="js/index.js"></script>
+</body>
+</html>
