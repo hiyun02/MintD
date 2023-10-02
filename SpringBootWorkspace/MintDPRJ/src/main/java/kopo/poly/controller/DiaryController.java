@@ -269,7 +269,7 @@ public class DiaryController {
     // 게시물 상세보기  --> url이 계속 바뀌어야 함 기본 url + diary_seq 값으로! 그래야 게시물마다 상세보기를 할 수가 있으니까
     // 똑같은 틀에 다른 맛 : 슈크림 붕어빵, 단팥 붕어빵 어쩌구 저쩌구 넣는 재료 따라 맛이 바뀌죠?
     // GetMapping에서 PostMapping으로 변경 조회수 올려서 저장해야 하니까 (헛소리 하지마 저장을 왜 하냐 실행될 때마다 카운트만 하면 되는데 되게 졸리신가 봐요;;;)
-    @GetMapping(value = "/diaryInfo")
+    @GetMapping(value = "diaryInfo")
     public String getDiaryInfo(HttpServletRequest request, ModelMap modelMap, HttpSession session) throws Exception {
         log.info(this.getClass().getName() + " 게시물 상세보기 컨트롤러(getDiaryInfo) 실행!");
 
@@ -341,7 +341,7 @@ public class DiaryController {
 
 
     // 게시물 수정페이지 불러오기
-    @GetMapping(value = "/update_test")
+    @GetMapping(value = "update_test")
     public String updateDiary() throws Exception {
         log.info(this.getClass().getName() + " 게시물 수정 페이지로 이동 컨트롤러 실행");
 
@@ -351,7 +351,7 @@ public class DiaryController {
     }
 
     // 게시물 수정 작업 요청
-    @PostMapping(value = "/updateDiary")
+    @PostMapping(value = "updateDiary")
     public String updateDiary(HttpServletRequest request, HttpSession session, MultipartFile file) throws Exception {
         log.info(this.getClass().getName() + " 게시물 수정 컨트롤러(updateDairy) 실행");
 
@@ -388,7 +388,7 @@ public class DiaryController {
 //    }
 
     // 게시물 삭제 작업 요청
-    @GetMapping(value = "/deleteDiaryInfo")
+    @GetMapping(value = "deleteDiaryInfo")
     public String deleteDiaryInfo(HttpServletRequest request) throws Exception {
         log.info(this.getClass().getName() + " 게시물 삭제하기 컨트롤러(deleteDiaryInfo) 실행!");
 
@@ -423,7 +423,7 @@ public class DiaryController {
     }
 
     // 좋아요수 증가시키기
-    @PostMapping(value = "/updateLikeCnt")
+    @PostMapping(value = "updateLikeCnt")
     @ResponseBody // ajax로 값을 주고받을 때는 반드시 써야 하는 어노테이션
     public void updateDiaryLikeCnt(HttpServletRequest request) throws Exception {
         log.info(this.getClass().getName() + " 좋아요 수 컨트롤러 (updateLikeCnt) 실행!");
@@ -454,7 +454,7 @@ public class DiaryController {
     }
 
     // 북마크 추가하기
-    @PostMapping(value = "/insertBookMark")
+    @PostMapping(value = "insertBookMark")
     @ResponseBody
     public void insertBookMark(HttpServletRequest request, HttpSession session) throws Exception {
         log.info(this.getClass().getName() + " 북마크 추가 컨트롤러(insertBookMark)실행!");
@@ -479,7 +479,7 @@ public class DiaryController {
     }
 
     // 검색 페이지 불러오기
-    @GetMapping(value = "/searchFeed")
+    @GetMapping(value = "searchFeed")
     public String getSearchFeed(ModelMap modelMap) throws Exception {
         log.info(this.getClass().getName() + " 검색 페이지 가져오기 컨트롤러(getSearchFeed) 실행!");
 
@@ -505,40 +505,40 @@ public class DiaryController {
     }
 
     // 검색 페이지 결과 인기순으로 정렬
-    @GetMapping(value = "/getSortByPopularity")
+    @GetMapping(value = "sortByLikeCnt")
     @ResponseBody
-    public List<DiaryDTO> getSortByPopularity(HttpServletRequest request) throws Exception {
-        log.info(this.getClass().getName() + " 인기순으로 리스트 정렬 요청 컨트롤러(getSortByPopularity) 실행합니다!");
+    public List<DiaryDTO> sortByLikeCnt(HttpServletRequest request) throws Exception {
+        log.info(this.getClass().getName() + " 인기순으로 리스트 정렬 요청 컨트롤러(sortByLikeCnt) 실행합니다!");
 
-        List<DiaryDTO> rList = diaryService.getSortByPopularity();
+        List<DiaryDTO> rList = diaryService.sortByLikeCnt();
 
-        log.info(this.getClass().getName() + " 인기순으로 리스트 정렬 요청 컨트롤러(getSortByPopularity) 종료합니다!");
+        log.info(this.getClass().getName() + " 인기순으로 리스트 정렬 요청 컨트롤러(sortByLikeCnt) 종료합니다!");
 
         return rList;
     }
 
     // 검색 페이지 결과 최신순으로 정렬
-    @GetMapping(value = "/getSortByDate")
+    @GetMapping(value = "sortByDatetime")
     @ResponseBody
-    public List<DiaryDTO> getSortByDate(HttpServletRequest request) throws Exception {
-        log.info(this.getClass().getName() + " 최신순으로 리스트 정렬 요청 컨트롤러(getSortByDate) 실행합니다!");
+    public List<DiaryDTO> sortByDatetime(HttpServletRequest request) throws Exception {
+        log.info(this.getClass().getName() + " 최신순으로 리스트 정렬 요청 컨트롤러(sortByDatetime) 실행합니다!");
 
-        List<DiaryDTO> rList = diaryService.getSortByDate();
+        List<DiaryDTO> rList = diaryService.sortByDatetime();
 
-        log.info(this.getClass().getName() + " 최신순으로 리스트 정렬 요청 컨트롤러(getSortByDate) 종료합니다!");
+        log.info(this.getClass().getName() + " 최신순으로 리스트 정렬 요청 컨트롤러(sortByDatetime) 종료합니다!");
 
         return rList;
     }
 
     // 검색 페이지 결과 조회수순으로 정렬
-    @GetMapping(value = "/getSortByViewCount")
+    @GetMapping(value = "sortByReadCnt")
     @ResponseBody
-    public List<DiaryDTO> getSortByViewCount(HttpServletRequest request) throws Exception {
-        log.info(this.getClass().getName() + " 조회수순으로 리스트 정렬 요청 컨트롤러(getSortByViewCount) 실행합니다!");
+    public List<DiaryDTO> sortByReadCnt(HttpServletRequest request) throws Exception {
+        log.info(this.getClass().getName() + " 조회수순으로 리스트 정렬 요청 컨트롤러(sortByReadCnt) 실행합니다!");
 
-        List<DiaryDTO> rList = diaryService.getSortByViewCount();
+        List<DiaryDTO> rList = diaryService.sortByReadCnt();
 
-        log.info(this.getClass().getName() + " 조회수순으로 리스트 정렬 요청 컨트롤러(getSortByViewCount) 종료합니다!");
+        log.info(this.getClass().getName() + " 조회수순으로 리스트 정렬 요청 컨트롤러(sortByReadCnt) 종료합니다!");
 
         return rList;
     }

@@ -20,93 +20,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
+@Controller
 @RequestMapping("/hashtag")
 @RequiredArgsConstructor
-@Controller
 public class HashtagController {
     private final IHashTagService hashTagService;
-
-    @GetMapping(value = "getFollowingList")
-    public String getfollowingId(HttpSession session, ModelMap model) throws Exception {
-        log.info(this.getClass().getName() + ".getFollowingList 시작!");
-
-        String user_id = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
-        log.info("user_id : " + user_id);
-
-        FollowDTO pDTO = new FollowDTO();
-        pDTO.setFollow_id(user_id);
-
-        List<FollowDTO> rList = Optional.ofNullable(hashTagService.getfollowingId(pDTO))
-                .orElseGet(ArrayList::new);
-
-
-        log.info("Controller Layer rList content: {}", rList);
-        log.info("rList size: " + rList.size());
-        model.addAttribute("rList", rList);
-
-        log.info(this.getClass().getName() + ".getFollowingList End!");
-
-        return "follow/followingList";
-    }
-
-    @GetMapping(value = "getFollowerList")
-    public String getfollowId(HttpSession session, ModelMap model) throws Exception {
-        log.info(this.getClass().getName() + ".getFollowerList 시작!");
-
-        String user_id = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
-        log.info("user_id : " + user_id);
-
-        FollowDTO pDTO = new FollowDTO();
-        pDTO.setFollowing_id(user_id);
-
-        List<FollowDTO> rList = Optional.ofNullable(hashTagService.getfollowId(pDTO))
-                .orElseGet(ArrayList::new);
-
-        model.addAttribute("rList", rList);
-
-        log.info("Controller Layer rList content: {}", rList);
-        log.info("rList size: " + rList.size());
-
-        log.info(this.getClass().getName() + ".getFollowerList End!");
-
-        return "follow/followerList";
-    }
-
-    @GetMapping(value = "countfollow")
-    public String countfollow(HttpSession session, ModelMap model) throws Exception {
-        log.info(this.getClass().getName() + ".getfollowId 시작!");
-
-        String user_id = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
-        log.info("user_id : " + user_id);
-
-        FollowDTO pDTO = new FollowDTO();
-        pDTO.setFollow_id(user_id);
-        pDTO.setFollowing_id(user_id);
-
-        FollowDTO rDTO = Optional.ofNullable(hashTagService.countfollow(pDTO, true))
-                .orElseGet(FollowDTO::new);
-
-        model.addAttribute("rDTO", rDTO);
-
-        log.info("Controller Layer rList content: {}", rDTO);
-
-        log.info(this.getClass().getName() + ".getfollowId End!");
-
-        return "/countfollow";
-    }
-
-    @PostMapping(value = "/uploadPhoto")
-    public String uploadPhoto(@RequestPart MultipartFile file, ModelMap model, HttpSession session) throws Exception {
-
-        log.info(this.getClass().getName() + ".uploadPhoto Start!");
-
-        hashTagService.uploadFile(file, session);
-
-        String msg = "수정되었습니다.";
-        model.addAttribute("msg", msg);
-
-        return "/profile";
-    }
 
     @GetMapping(value = "getHashtag")
     public String getHashtag(HttpServletRequest request, ModelMap modelMap) throws Exception {
@@ -127,6 +45,19 @@ public class HashtagController {
         log.info(this.getClass().getName() + ".getHashtag End!");
         modelMap.addAttribute("rList", rList);
         return "html/searchFeed";
+    }
+
+    @PostMapping(value = "/uploadPhoto")
+    public String uploadPhoto(@RequestPart MultipartFile file, ModelMap model, HttpSession session) throws Exception {
+
+        log.info(this.getClass().getName() + ".uploadPhoto Start!");
+
+        hashTagService.uploadFile(file, session);
+
+        String msg = "수정되었습니다.";
+        model.addAttribute("msg", msg);
+
+        return "/profile";
     }
 
     @PostMapping(value = "/profileUpdate")
@@ -165,32 +96,6 @@ public class HashtagController {
         }
 
         return "/redirect";
-    }
-
-    @GetMapping("unFollow")
-    public String unFollow(ModelMap modelMap) throws Exception {
-        log.info(this.getClass().getName()+".unfollow 시작");
-
-        String url = "";
-        String msg = "";
-
-        FollowDTO followDTO = new FollowDTO();
-        followDTO.setFollow_id("soyoung");
-        followDTO.setFollowing_id("hayun");
-
-        int res = hashTagService.unFollow(followDTO);
-
-        if (res == 1) {
-            msg = "팔로우가 취소되었습니다.";
-            url = "/diary/getMyDiaryList";
-        } else {
-            msg = "다시 시도해주세요.";
-            url = "/diary/getUserDiaryList";
-        }
-        modelMap.addAttribute("url",url);
-        modelMap.addAttribute("msg",msg);
-
-        return "redirect";
     }
 
 }

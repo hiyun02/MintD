@@ -51,13 +51,13 @@ public interface IDiaryMapper {
     List<DiaryDTO> getSearchFeed() throws Exception;
 
     // 검색 페이지에서 인기순으로 정렬
-    List<DiaryDTO> getSortByPopularity() throws Exception;
+    List<DiaryDTO> sortByLikeCnt() throws Exception;
 
     // 검색 페이지에서 최신순으로 정렬
-    List<DiaryDTO> getSortByDate() throws Exception;
+    List<DiaryDTO> sortByDatetime() throws Exception;
 
     // 검색 페이지에서 조회수순으로 정렬
-    List<DiaryDTO> getSortByViewCount() throws Exception;
+    List<DiaryDTO> sortByReadCnt() throws Exception;
 
 
     //게시글 수 카운트

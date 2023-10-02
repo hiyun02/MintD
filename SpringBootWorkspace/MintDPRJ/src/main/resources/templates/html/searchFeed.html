@@ -29,7 +29,7 @@
 
     function SortByPopularity() {
         $.ajax({
-            url: "/diary/getSortByPopularity",
+            url: "/diary/sortByLikeCnt",
             type: "get",
             dataType: "JSON",
             success: function (rList) {
@@ -52,7 +52,7 @@
 
     function SortByViewCount() {
         $.ajax({
-            url: "/diary/getSortByViewCount",
+            url: "/diary/sortByReadCnt",
             type: "get",
             dataType: "JSON",
             success: function (rList) {
@@ -74,7 +74,7 @@
 
     function SortByDate() {
         $.ajax({
-            url: "/diary/getSortByDate",
+            url: "/diary/sortByDatetime",
             type: "get",
             dataType: "JSON",
             success: function (rList) {

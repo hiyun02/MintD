@@ -142,7 +142,6 @@ public class UserInfoController {
             log.info("user_email : " + user_email);
             log.info("user_nick : " + user_nick);
 //            log.info("addr2 : " + addr2);
-
             /*
              * #######################################################
              *        웹(회원정보 입력화면)에서 받는 정보를 DTO에 저장하기 시작!!
@@ -150,7 +149,6 @@ public class UserInfoController {
              *        무조건 웹으로 받은 정보는 DTO에 저장해야 한다고 이해하길 권함
              * #######################################################
              */
-
             //웹(회원정보 입력화면)에서 받는 정보를 저장할 변수를 메모리에 올리기
             pDTO = new UserInfoDTO(); // userinfodto 객체를 생성해서 pdtd라는 변수에 담음
 

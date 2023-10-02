@@ -287,32 +287,32 @@ public class DiaryService implements IDiaryService {
 
     // 검색 페이지 결과 인기순으로 정렬
     @Override
-    public List<DiaryDTO> getSortByPopularity() throws Exception {
-        log.info(this.getClass().getName() + " 검색 페이지 인기순으로 정렬 서비스(getSortByPopularity) 실행합니다!");
+    public List<DiaryDTO> sortByLikeCnt() throws Exception {
+        log.info(this.getClass().getName() + " 검색 페이지 인기순으로 정렬 서비스(sortByLikeCnt) 실행합니다!");
 
-        log.info(this.getClass().getName() + " 검색 페이지 인기순으로 정렬 서비스(getSortByPopularity) 종료합니다!");
+        log.info(this.getClass().getName() + " 검색 페이지 인기순으로 정렬 서비스(sortByLikeCnt) 종료합니다!");
 
-        return diaryMapper.getSortByPopularity();
+        return diaryMapper.sortByLikeCnt();
     }
 
     // 검색 페이지 결과 최신순으로 정렬
     @Override
-    public List<DiaryDTO> getSortByDate() throws Exception {
-        log.info(this.getClass().getName() + " 검색 페이지 최신순으로 정렬 서비스(getSortByDate) 실행!");
+    public List<DiaryDTO> sortByDatetime() throws Exception {
+        log.info(this.getClass().getName() + " 검색 페이지 최신순으로 정렬 서비스(sortByDatetime) 실행!");
 
-        log.info(this.getClass().getName() + " 검색 페이지 최신순으로 정렬 서비스(getSortByDate) 종료!");
+        log.info(this.getClass().getName() + " 검색 페이지 최신순으로 정렬 서비스(sortByDatetime) 종료!");
 
-        return diaryMapper.getSortByDate();
+        return diaryMapper.sortByDatetime();
     }
 
     // 검색 페이지 결과 조회수순으로 정렬
     @Override
-    public List<DiaryDTO> getSortByViewCount() throws Exception {
-        log.info(this.getClass().getName() + " 검색 페이지 조회수순으로 정렬 서비스(getSortByViewCount) 실행!");
+    public List<DiaryDTO> sortByReadCnt() throws Exception {
+        log.info(this.getClass().getName() + " 검색 페이지 조회수순으로 정렬 서비스(sortByReadCnt) 실행!");
 
-        log.info(this.getClass().getName() + " 검색 페이지 조회수순으로 정렬 서비스(getSortByViewCount) 종료!");
+        log.info(this.getClass().getName() + " 검색 페이지 조회수순으로 정렬 서비스(sortByReadCnt) 종료!");
 
-        return diaryMapper.getSortByViewCount();
+        return diaryMapper.sortByReadCnt();
     }
 
     @Override

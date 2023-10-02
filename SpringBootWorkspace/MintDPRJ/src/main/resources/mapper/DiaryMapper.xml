@@ -138,7 +138,7 @@
     </select>
 
     <!-- 검색 페이지 인기순으로 정렬해서 가져오기 -->
-    <select id="getSortByPopularity" resultType="DiaryDTO">
+    <select id="sortByLikeCnt" resultType="DiaryDTO">
         SELECT DIARY_SEQ, LIKE_CNT, READ_CNT, IMG_PATH, NFT_YN, CONTENTS, READ_CNT,
                TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT
         FROM DIARY
@@ -146,7 +146,7 @@
     </select>
 
     <!-- 검색 페이지 최신순으로 정렬해서 가져오기 -->
-    <select id="getSortByDate" resultType="DiaryDTO">
+    <select id="sortByDatetime" resultType="DiaryDTO">
         SELECT DIARY_SEQ, LIKE_CNT, READ_CNT, IMG_PATH, NFT_YN, CONTENTS, READ_CNT,
                TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT
         FROM DIARY
@@ -154,7 +154,7 @@
     </select>
 
     <!-- 검색 페이지 조회수순으로 정렬해서 가져오기 -->
-    <select id="getSortByViewCount" resultType="DiaryDTO">
+    <select id="sortByReadCnt" resultType="DiaryDTO">
         SELECT DIARY_SEQ, LIKE_CNT, READ_CNT, IMG_PATH, NFT_YN, CONTENTS, READ_CNT,
                TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT
         FROM DIARY
