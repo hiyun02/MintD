@@ -29,38 +29,4 @@
         WHERE USER_ID = #{user_id};
     </update>
 
-    <select id="getfollowingId" resultType="FollowDTO">
-        SELECT FOLLOWING_ID
-        FROM FOLLOW
-        WHERE FOLLOW_ID = #{follow_id};
-    </select>
-
-    <select id="getfollowId" resultType="FollowDTO">
-        SELECT FOLLOW_ID
-        FROM FOLLOW
-        WHERE FOLLOWING_ID = #{following_id};
-    </select>
-
-    <select id="countfollowingId" parameterType="FollowDTO">
-    SELECT COUNT(*) AS FOLLOWING_COUNT
-    FROM FOLLOW
-    WHERE FOLLOW_ID = #{follow_id};
-    </select>
-
-    <select id="countfollowerId" parameterType="FollowDTO">
-    SELECT COUNT(*) as FOLLOWER_COUNT
-    FROM FOLLOW
-    WHERE FOLLOWING_ID = #{following_id};
-    </select>
-
-    <select id="countfollow" resultType="FollowDTO">
-    SELECT COUNT(*)
-        FROM FOLLOW
-    WHERE FOLLOW_ID = #{follow_id};
-    </select>
-
-    <delete id="unFollow" parameterType="FollowDTO">
-        DELETE FROM FOLLOW
-            WHERE FOLLOW_ID = #{follow_id} AND FOLLOWING_ID = #{following_id}
-    </delete>
 </mapper>
