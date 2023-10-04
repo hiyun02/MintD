@@ -74,8 +74,10 @@ public class FollowController {
     public String unFollow(HttpServletRequest request, HttpSession session, ModelMap modelMap) throws Exception {
         log.info(this.getClass().getName() + ".unfollow 시작");
 
-        String url = "";
-        String msg = "";
+        String status;
+        String title;
+        String msg;
+        String url;
 
         String follow_id = (String) session.getAttribute("SS_USER_ID");
         String unfollowing_id = request.getParameter("unfollowing_id");
@@ -89,14 +91,21 @@ public class FollowController {
         int res = followService.unFollow(followDTO);
 
         if (res == 1) {
+            status = "success";
+            title = "성공";
             msg = "팔로우가 취소되었습니다.";
             url = "/diary/getMyDiaryList";
         } else {
+            status = "error";
+            title = "실패";
             msg = "다시 시도해주세요.";
             url = "/diary/getUserDiaryList";
         }
-        modelMap.addAttribute("url", url);
+
+        modelMap.addAttribute("status", status);
+        modelMap.addAttribute("title", title);
         modelMap.addAttribute("msg", msg);
+        modelMap.addAttribute("url", url);
 
         return "redirect";
     }

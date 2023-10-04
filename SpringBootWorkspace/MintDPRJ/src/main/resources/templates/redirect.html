@@ -10,11 +10,13 @@
     window.onload = function () {
         let msg = [[${msg}]];
         let url = [[${url}]];
+        let title = [[${title}]];
+        let status = [[${status}]];
 
         Swal.fire({
-            title: '성공!',
+            title: title,
             text: msg,
-            icon: 'success',
+            icon: status,
             confirmButtonColor: '#58A581'
         })
 
