@@ -25,13 +25,18 @@ import java.util.Optional;
 public class UserInfoController {
     private final IUserInfoService userInfoService; // 서비스는 모든 컨트롤러 함수에서 실행시킬 수 있어야 하므로 전역변수로 선언
 
+    private String status;
+    private String title;
+    private String msg;
+    private String url;
+    private String redirect = "redirect";
+
     /**
      * 회원가입 화면으로 이동
      */
     @GetMapping(value = "signUp")
     public String signUp() {
         log.info(this.getClass().getName() + ".signUp");
-
         return "user/signUp";
     }
 
@@ -99,9 +104,6 @@ public class UserInfoController {
         // request는 url 요청으로부터 넘어온 값을 키를 통해 꺼내고, ModelMap은 결과 페이지에 데이터를 넘겨줌
         log.info(this.getClass().getName() + ".insertUserInfo start!");
         int res;
-        String msg = ""; //회원가입 결과에 대한 메시지를 전달할 변수
-        String url = ""; //회원가입 결과에 대한  URL을 전달할 변수
-
         //웹(회원정보 입력화면)에서 받는 정보를 저장할 변수
         UserInfoDTO pDTO = null;
 
@@ -171,30 +173,36 @@ public class UserInfoController {
              *        무조건 웹으로 받은 정보는 DTO에 저장해야 한다고 이해하길 권함
              * #######################################################
              */
-
             /*
              * 회원가입
              * */
-            res = userInfoService.insertUserInfo(pDTO);
             // userInfoService라는 서비스 객체의 insertUserInfo 함수에 pDTO값을 넣어서 Service에서 실행
-
+            res = userInfoService.insertUserInfo(pDTO);
 
             log.info("회원가입 결과(res) : " + res);
 
             if (res == 1) {
+                status = "success";
+                title = "완료!";
                 msg = "회원가입되었습니다.";
                 url = "/user/login";
             } else {
+                status = "error";
+                title = "실패!";
                 msg = "오류로 인해 회원가입이 실패하였습니다.";
                 url = "/user/signUp";
             }
         } catch (DuplicateKeyException e) { //PK인 USER_ID가 중복되어 에러가 발생했다면
+            status = "error";
+            title = "실패!";
             msg = "이미 가입된 아이디입니다. 다른 아이디로 변경 후 다시 시도해주세요.";
             url = "/user/signUp";
             log.info(e.toString());
             e.printStackTrace();
         } catch (Exception e) {
             //저장이 실패되면 사용자에게 보여줄 메시지
+            status = "error";
+            title = "실패!";
             msg = "시스템 오류로 실패하였습니다. 다시 시도해주세요.";
             url = "/user/signUp";
             log.info(e.toString());
@@ -203,14 +211,16 @@ public class UserInfoController {
         } finally {
             log.info("출력할 메세지 : " + msg);
             log.info("이동할 경로 : " + url);
+
+            model.addAttribute("status", status);
+            model.addAttribute("title", title);
             model.addAttribute("msg", msg);
-            // 실제 전송할 메세지를 키값인 "msg"을 통해 밸류값 msg를 다음 페이지로 전달함
             model.addAttribute("url", url);
 
             log.info(this.getClass().getName() + ".insertUserInfo End!");
         }
 
-        return "redirect";
+        return redirect;
         // return "다음으로 보여줄 페이지경로"
         // 페이지 이동과 팝업창을 띄우기 위해 msg와 url을 redirect로 보내줌.
     }
@@ -224,6 +234,7 @@ public class UserInfoController {
         log.info(this.getClass().getName() + ".user/login End!");
         return "user/signUp";
     }
+
     @GetMapping(value = "login2")
     public String login2() {
         log.info(this.getClass().getName() + ".user/login2 Start!");
@@ -239,12 +250,8 @@ public class UserInfoController {
     public String loginProc(HttpServletRequest request, ModelMap model, HttpSession session) {
 
         log.info(this.getClass().getName() + ".loginProc Start!");
-
-        String msg = ""; //로그인 결과에 대한 메시지를 전달할 변수
-        String url = "";
         //웹(회원정보 입력화면)에서 받는 정보를 저장할 변수
         UserInfoDTO pDTO = null;
-
         try {
 
             String user_id = CmmUtil.nvl(request.getParameter("user_id")); //아이디
@@ -287,46 +294,48 @@ public class UserInfoController {
                 session.setAttribute("SS_USER_NAME", CmmUtil.nvl(rDTO.getUser_name()));
                 session.setAttribute("SS_PROFILE_PATH", CmmUtil.nvl(rDTO.getProfile_path()));
                 session.setAttribute("SS_USER_INTRO", CmmUtil.nvl(rDTO.getUser_intro()));
-                log.info("로그인 결과 : "+(rDTO.toString()));
-                //로그인 성공 메세지와 이동할 경로의 url
-                msg = "로그인이 성공했습니다. \n" + rDTO.getUser_nick() + "님 환영합니다.";
+                log.info("로그인 결과 : " + (rDTO.toString()));
+
+                status = "success";
+                title = "성공!";
+                msg = "로그인에 성공했습니다. \n" + rDTO.getUser_nick() + "님 환영합니다.";
                 url = "/diary/getMyDiaryList";
 
             } else {
+                status = "error";
+                title = "다시 시도해주세요";
                 msg = "아이디와 비밀번호가 올바르지 않습니다.";
                 url = "/user/login";
             }
 
         } catch (Exception e) {
             //저장이 실패되면 사용자에게 보여줄 메시지
+            status = "error";
+            title = "다시 시도해주세요";
             msg = "시스템 문제로 로그인이 실패했습니다.";
+            url = "/user/login";
             log.info(e.toString());
             e.printStackTrace();
-
         } finally {
+            model.addAttribute("status", status);
+            model.addAttribute("title", title);
             model.addAttribute("msg", msg);
             model.addAttribute("url", url);
 
             log.info(this.getClass().getName() + ".loginProc End!");
         }
 
-        return "redirect";
+        return redirect;
     }
-
-
     /**
      * 아이디 찾기 화면
      */
     @GetMapping(value = "findId")
     public String findId() {
         log.info(this.getClass().getName() + ".findId Start!");
-
-        log.info(this.getClass().getName() + ".findId End!");
-
         return "user/findId";
 
     }
-
     /**
      * 아이디 찾기 로직 수행
      */
@@ -367,28 +376,29 @@ public class UserInfoController {
                 .orElseGet(UserInfoDTO::new);
 
         String user_id = CmmUtil.nvl(rDTO.getUser_id());
-
-        String msg; //아이디 찾기 결과에 대한 메시지를 전달할 변수, 변수 선언을 안하면 데이터를 쓸 수가 없음
-        String url;
-
-
         log.info("user_id : " + rDTO.getUser_id());
 
 
         if (user_id.length() != 0) {
+            status = "success";
+            title = "성공!";
             msg = "회원님의 아이디는 " + rDTO.getUser_id() + " 입니다.";
             url = "/user/login";
         } else {
+            status = "error";
+            title = "실패";
             msg = "아이디를 찾을 수 없습니다.";
             url = "/user/findId";
         }
 
+        model.addAttribute("status", status);
+        model.addAttribute("title", title);
         model.addAttribute("msg", msg);
         model.addAttribute("url", url);
 
         log.info(this.getClass().getName() + "아이디찾기 End!");
 
-        return "redirect";
+        return redirect;
     }
 
 
@@ -435,23 +445,24 @@ public class UserInfoController {
         UserInfoDTO rDTO = Optional.ofNullable(userInfoService.checkUserId(pDTO)).orElseGet(UserInfoDTO::new);
 
         String user_pwd = CmmUtil.nvl(String.valueOf(rDTO.getAuthNumber())); //int인 authnumber를 string으로 바꾼 후 비밀번호에 넣음
-
         log.info("user_pwd : " + user_pwd);
 
-        String msg; //비밀번호 찾기 결과에 대한 메시지를 전달할 변수, 변수 선언을 안하면 데이터를 쓸 수가 없음
-        String url;
-
         if (user_pwd.length() == 8) { // 인증번호가 정상적으로 발송됐다면 8자리이므로
+            status = "success";
+            title = "성공!";
             msg = "회원님의 이메일로 임시 비밀번호를 전송했습니다.";
             url = "/user/changePwd";
         } else {
+            status = "error";
+            title = "다시 시도해주세요";
             msg = "일치하는 정보가 없습니다.";
             url = "/user/findPwd";
         }
 
+        model.addAttribute("status", status);
+        model.addAttribute("title", title);
         model.addAttribute("msg", msg);
         model.addAttribute("url", url);
-
 
         log.info("임시비번을 새 비밀번호로 변경 시작");
 
@@ -475,7 +486,7 @@ public class UserInfoController {
 
         log.info(this.getClass().getName() + ".user/searchUserPwdProc End!");
 
-        return "redirect";
+        return redirect;
 
     }
 
@@ -550,20 +561,24 @@ public class UserInfoController {
 
         log.info(this.getClass().getName() + "비밀번호 바꾸기 End!");
 
-        return "redirect";
+        return redirect;
 
     }
 
     @GetMapping(value = "logout")
     public String logout(HttpSession session, ModelMap modelMap) {
         log.info(this.getClass().getName() + ".user/logout Start!");
-        String msg = "로그아웃되었습니다.";
-        String url = "/user/login";
         session.invalidate();
+        status = "success";
+        title = "성골!";
+        msg = "로그아웃되었습니다.";
+        url = "/user/login";
+        modelMap.addAttribute("status", status);
+        modelMap.addAttribute("title", title);
         modelMap.addAttribute("msg", msg);
         modelMap.addAttribute("url", url);
         log.info(this.getClass().getName() + ".user/logout End!");
-        return "redirect";
+        return redirect;
     }
 
 }
