@@ -299,9 +299,6 @@ public class DiaryService implements IDiaryService {
     @Override
     public List<DiaryDTO> sortByDatetime() throws Exception {
         log.info(this.getClass().getName() + " 검색 페이지 최신순으로 정렬 서비스(sortByDatetime) 실행!");
-
-        log.info(this.getClass().getName() + " 검색 페이지 최신순으로 정렬 서비스(sortByDatetime) 종료!");
-
         return diaryMapper.sortByDatetime();
     }
 
@@ -309,18 +306,9 @@ public class DiaryService implements IDiaryService {
     @Override
     public List<DiaryDTO> sortByReadCnt() throws Exception {
         log.info(this.getClass().getName() + " 검색 페이지 조회수순으로 정렬 서비스(sortByReadCnt) 실행!");
-
-        log.info(this.getClass().getName() + " 검색 페이지 조회수순으로 정렬 서비스(sortByReadCnt) 종료!");
-
         return diaryMapper.sortByReadCnt();
     }
 
-    @Override
-    public int getMyDiaryCnt(DiaryDTO pDTO) throws Exception {
-        log.info(this.getClass().getName() + ".getMyDiaryCnt");
-        DiaryDTO rDTO = diaryMapper.getMyDiaryCnt(pDTO);
-        return rDTO.getDiary_cnt();
-    }
 
     @Override
     public UserInfoDTO getProfilePath(UserInfoDTO pDTO) throws Exception {

@@ -4,6 +4,7 @@ import kopo.poly.dto.DiaryDTO;
 import kopo.poly.dto.FollowDTO;
 import kopo.poly.dto.UserInfoDTO;
 import kopo.poly.service.IDiaryService;
+import kopo.poly.service.IFollowService;
 import kopo.poly.service.IHashTagService;
 import kopo.poly.util.CmmUtil;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,13 @@ public class DiaryController {
 
     // 서비스 호출하기 위해서 컨트롤러가 실행되는 동안 메모리에 서비스도 같이 올려두기
     private final IDiaryService diaryService;
+    private final IFollowService followService;
+
+    private String status;
+    private String title;
+    private String msg;
+    private String url;
+    private String redirect = "redirect";
 
     // NFT 다이어리 리스트 가져오기
     @GetMapping(value = "/getNFTDiaryList")
@@ -106,7 +114,7 @@ public class DiaryController {
 
     private final IHashTagService hashTagService;
 
-    // 나의 게시물 리스트 보여주기(기본 페이지)
+    // 사용자 피드
     @GetMapping(value = "/getMyDiaryList")
     public String getMyDiaryList(ModelMap modelMap, HttpSession session) throws Exception {
         log.info(this.getClass().getName() + " 나의 게시물 목록 가져오기(getMyDiaryList)컨트롤러 실행!");
@@ -127,11 +135,11 @@ public class DiaryController {
                 rList = new ArrayList<>();
             }
 
-            // 화면으로 보낼 모델맵의 "rList" 속성에 값으로 rList를 추가해서 보내기
+            // 조회된 다이어리 리스트
             modelMap.addAttribute("rList", rList);
 
             //게시글 수 구하기
-            int diary_cnt = diaryService.getMyDiaryCnt(pDTO);
+            int diary_cnt = rList.size();
             log.info("diary_cnt : " + diary_cnt);
             modelMap.addAttribute("diary_cnt", diary_cnt);
 
@@ -142,7 +150,7 @@ public class DiaryController {
             followDTO.setFollow_id(user_id);
             followDTO.setFollowing_id(user_id);
 
-            followDTO = Optional.ofNullable(hashTagService.countfollow(followDTO, true))
+            followDTO = Optional.ofNullable(followService.countfollow(followDTO, true))
                     .orElseGet(FollowDTO::new);
             log.info(followDTO.toString());
             modelMap.addAttribute("followDTO", followDTO);

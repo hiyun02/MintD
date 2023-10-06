@@ -568,11 +568,14 @@ public class UserInfoController {
     @GetMapping(value = "logout")
     public String logout(HttpSession session, ModelMap modelMap) {
         log.info(this.getClass().getName() + ".user/logout Start!");
+        //세션 값 비우기
         session.invalidate();
+        //전달할 내용
         status = "success";
-        title = "성골!";
+        title = "성공!";
         msg = "로그아웃되었습니다.";
         url = "/user/login";
+        //ModelMap 객체를 통한 값 전달
         modelMap.addAttribute("status", status);
         modelMap.addAttribute("title", title);
         modelMap.addAttribute("msg", msg);

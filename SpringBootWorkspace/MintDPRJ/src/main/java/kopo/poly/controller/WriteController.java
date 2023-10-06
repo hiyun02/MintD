@@ -14,6 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 public class WriteController {
 
+    private String status;
+    private String title;
+    private String msg;
+    private String url;
+    private String redirect = "redirect";
+
     @GetMapping(value = "choiceWriteMethod")
     public String choiceWriteMethod() {
         log.info(this.getClass().getName() + ".choiceWriteMethod");

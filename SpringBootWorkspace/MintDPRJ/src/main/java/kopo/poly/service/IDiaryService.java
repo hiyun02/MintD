@@ -59,9 +59,6 @@ public interface IDiaryService {
     // 검색 페이지에서 조회수순으로 정렬
     List<DiaryDTO> sortByReadCnt() throws Exception;
 
-    //게시글 수 카운트
-    int getMyDiaryCnt(DiaryDTO pDTO) throws Exception;
-
     //프로필사진
     UserInfoDTO getProfilePath(UserInfoDTO pDTO) throws Exception;
 }
