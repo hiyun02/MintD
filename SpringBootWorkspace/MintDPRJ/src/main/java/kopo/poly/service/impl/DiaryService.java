@@ -99,33 +99,10 @@ public class DiaryService implements IDiaryService {
                 log.info("폴더가 이미 생성되어 있습니다.");
             }
 
-            /*
-             아래 싹 주석처리한 부분이 원래 파일명을 생성할 때 썼던 건데 다른 방법으로도 가능하길래 바꿈(위에 있음)
-             근데 왜 안 지웠냐면 유진 민재 나중에 보라고(하 정말 너무 친절하죠? 네 알아요 감사합니다 여러분 행복하세요)
-
-             StringBuilder는 가변적인 문자열을 다룰 때 사용되는 클래스, 한 번 생성된 StringBuilder 객체는 내부의 문자열을 수정할 수 있음
-             즉, 문자열을 내 맘대로 넣었다 뺐다 요리조리 다룰 수 있다는 것!
-             StringBuilder 객체를 생성하고, 변수명을 imgFileName으로 지정함
-             하지만 이미 위에서 저장된 이름을 그대로 파일명으로 만들어서 변수에 담아놨기 때문에 StringBuilder 자체를 안 써도 된다!!
-             StringBuilder imgFileName = new StringBuilder();
-             이미지 경로 + '-' + 날짜 + .png --> 파일명
-             imgFileName.append(pDTO.getImg_path());             // dto에서 경로를 갖고 있는 변수의 값을 가져오고
-             imgFileName.append(upLoadImgInfo);                  // 이 변수가 가진 값을 그 뒤에 더하고
-             imgFileName.append("_");                            // _ 이거 그 뒤에 추가하고
-             imgFileName.append(DateUtil.getDateTime("HHmmss")); // 시간 추가한 뒤
-             imgFileName.append(".png");                         // 확장자까지 붙임(정말 길죠? 네 그래서 안 썼어요)
-
-            // 위에서 생성한 파일명을 문자열로 바꿔서 fileName이라는 변수에 저장 --> 이것도 할 필요 없음
-            // String fileName = imgFileName.toString();
-             */
-
-
             log.info("저장된 이미지의 파일명: {}", upLoadImgInfo);
 
 
 //            unix 기반 디렉터리 구분자는 "/"
-//            \\ -> window 기반 디렉터리 구분자(아래에 + 뒤에 원래 \\ 들어가있었음, 안 보인다고? 당연하지 내가 빼버렸으니까~!)
-            // 사실 이거 안 써도 되는데 그냥...
             String fullFilePath = uploadImagePath + upLoadImgInfo;
             log.info("저장된 파일의 경로와 파일명 : {}", fullFilePath);
 
@@ -134,16 +111,13 @@ public class DiaryService implements IDiaryService {
 
             // 컨트롤러가 보내준 값 변경하고 매퍼한테 보내면서 함수 호출
             diaryMapper.insertDiaryInfo(pDTO);
-
         } catch (Exception e) {
             log.info(e.toString());
             e.printStackTrace();
         } finally {
             log.info(this.getClass().getName() + " 게시물 추가하기 서비스(insertDiaryInfo)종료!");
         }
-
         // 반환 값은 없음(추가만 하면 끝)
-
     }
 
     // 게시물 상세보기
@@ -154,7 +128,6 @@ public class DiaryService implements IDiaryService {
 
         // 컨트롤러로부터 받은 값을 매퍼에게 주면서 매퍼가 갖고 있는 함수 호출한 뒤, 결과값을 받아와서 rDTO라는 변수에 저장
        DiaryDTO rDTO = diaryMapper.getDiaryInfo(pDTO);
-
         log.info(this.getClass().getName() + " 게시물 상세보기 서비스(getDiaryInfo)종료!");
 
         // 매퍼로부터 받아온 값을 컨트롤러로 돌려주기
@@ -165,21 +138,15 @@ public class DiaryService implements IDiaryService {
     @Override
     public void updateDiaryReadCnt(DiaryDTO pDTO) throws Exception {
         log.info(this.getClass().getName() + " 게시물 조회수 증가 서비스(updateDiaryReadCnt) 실행!");
-
         // 매퍼 함수 호출해서 조회수 증가시키기
         diaryMapper.updateDiaryReadCnt(pDTO);
-
-        log.info(this.getClass().getName() + " 게시물 조회수 증가 서비스(updateDiaryReadCnt) 종료!");
     }
 
     // 게시물 수정하기 --> 이거는 아직 하지말 것!
     @Override
     public void updateDiaryInfo(DiaryDTO pDTO) throws Exception {
         log.info(this.getClass().getName() + " 게시물 수정 서비스(updateDiaryInfo) 실행!");
-
         diaryMapper.updateDiaryInfo(pDTO);
-
-        log.info(this.getClass().getName() + " 게시물 수정 서비스(updateDiaryInfo) 종료!");
     }
 
     // 게시물 삭제하기
@@ -187,16 +154,7 @@ public class DiaryService implements IDiaryService {
     @Override
     public void deleteDiaryInfo(DiaryDTO pDTO) throws Exception {
         log.info(this.getClass().getName() + " 게시물 삭제 서비스(deleteDiaryInfo) 실행!");
-        String diary_seq = "10";  //삭제할 게시물의 번호 내가 임의로 설정
-
-        pDTO.setDiary_seq(diary_seq);
-
-        // 매퍼한테 보내면서 함수 호출
         diaryMapper.deleteDiaryInfo(pDTO);
-
-
-        log.info(this.getClass().getName() + " 게시물 삭제 서비스(deleteDiaryInfo) 종료!");
-
         // 반환 값은 없음(삭제만 하면 끝)
     }
 
@@ -206,13 +164,8 @@ public class DiaryService implements IDiaryService {
     @Override
     public void updateDiaryLikeCnt(DiaryDTO pDTO) throws Exception {
         log.info(this.getClass().getName() + " 좋아요수 증가 서비스(updateLikeCnt)실행!");
-
-        // 매퍼 함수 호출하기
         diaryMapper.updateDiaryLikeCnt(pDTO);
-
-        log.info(this.getClass().getName() + " 좋아요수 증가 서비스(updateLikeCnt)종료!");
-
-        // 반환 값 없음 그냥 쿼리문 실행해서 데이터 베이스 내 데이터 변경하면 끝!
+        // 반환 값 없이 쿼리문 실행해서 데이터베이스 내부 데이터 변경
     }
 
 
@@ -220,22 +173,14 @@ public class DiaryService implements IDiaryService {
     @Override
     public void insertBookMark(DiaryDTO pDTO) throws Exception {
         log.info(this.getClass().getName() + " 북마크 추가 서비스(insertBookMark)실행!");
-
         diaryMapper.insertBookMark(pDTO);
-
-        log.info(this.getClass().getName() + " 북마크 추가 서비스(insertBookMark)종료!");
     }
 
     // 북마크 여부 조회
     @Override
     public String getBookMarkExists(DiaryDTO pDTO) throws Exception {
         log.info(this.getClass().getName() + " 북마크 여부 조회 서비스(getBookMarkExists) 실행");
-
-        String bookmark_yn = String.valueOf(diaryMapper.getBookMarkExists(pDTO));
-
-        log.info(this.getClass().getName() + " 북마크 여부 조회 서비스(getBookMarkExists) 종료");
-
-        return bookmark_yn;
+        return String.valueOf(diaryMapper.getBookMarkExists(pDTO));
     }
 
 
@@ -243,45 +188,27 @@ public class DiaryService implements IDiaryService {
     @Override
     public List<DiaryDTO> getNFTDiaryList(DiaryDTO pDTO) throws Exception {
         log.info(this.getClass().getName() + " NFT 다이어리 리스트 가져오기 서비스(getNFTDiaryList) 실행!");
-
-        List<DiaryDTO> rList = diaryMapper.getNFTDiaryList(pDTO);
-
-        log.info(this.getClass().getName() + " NFT 다이어리 리스트 가져오기 서비스(getNFTDiaryList) 종료!");
-
-        return rList;
+        return diaryMapper.getNFTDiaryList(pDTO);
     }
 
     // 보괌함 리스트 가져오기 전 데이터 조회(북마크 테이블)
     @Override
     public List<DiaryDTO> getBookMarkFind(DiaryDTO pDTO) throws Exception {
         log.info(this.getClass().getName() + " 북마크 리스트 가져오기 위해 북마크 테이블 조회 실행 합니다.");
-
-        List<DiaryDTO> rList = diaryMapper.getBookMarkFind(pDTO);
-
-        log.info(this.getClass().getName() + " 북마크 리스트 가져오기 위해 북마크 테이블 조회 종료 합니다.");
-
-        return rList;
+        return diaryMapper.getBookMarkFind(pDTO);
     }
 
     // 보관함 리스트 가져오기
     @Override
     public List<DiaryDTO> getBookMarkList(DiaryDTO sDTO) throws Exception {
-        log.info(this.getClass().getName() + " 북마크 리스트 가져오기 위해 ~~~ 실행 합니다.");
-
-        List<DiaryDTO> bList = (diaryMapper.getBookMarkList(sDTO));
-
-        log.info(this.getClass().getName() + " 북마크 리스트 가져오기 위해 ~~~ 종료 합니다.");
-
-        return bList;
+        log.info(this.getClass().getName() + " 북마크 리스트 가져오기 위해 getBookMarkList 실행 합니다.");
+        return diaryMapper.getBookMarkList(sDTO);
     }
 
     // 검색 페이지 불러오기
     @Override
     public List<DiaryDTO> getSearchFeed() throws Exception {
         log.info(this.getClass().getName() + " 검색 페이지 가져오기 위한 서비스(getSearchFeed) 실행합니다! ");
-
-        log.info(this.getClass().getName() + " 검색 페이지 가져오기 위한 서비스(getSearchFeed) 종료합니다! ");
-
         return diaryMapper.getSearchFeed();
     }
 
@@ -289,9 +216,6 @@ public class DiaryService implements IDiaryService {
     @Override
     public List<DiaryDTO> sortByLikeCnt() throws Exception {
         log.info(this.getClass().getName() + " 검색 페이지 인기순으로 정렬 서비스(sortByLikeCnt) 실행합니다!");
-
-        log.info(this.getClass().getName() + " 검색 페이지 인기순으로 정렬 서비스(sortByLikeCnt) 종료합니다!");
-
         return diaryMapper.sortByLikeCnt();
     }
 
