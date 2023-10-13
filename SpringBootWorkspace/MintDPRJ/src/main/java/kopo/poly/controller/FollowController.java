@@ -99,7 +99,7 @@ public class FollowController {
             status = "error";
             title = "실패";
             msg = "다시 시도해주세요.";
-            url = "/diary/getUserDiaryList";
+            url = "/diary/getFeedInfo";
         }
 
         modelMap.addAttribute("status", status);

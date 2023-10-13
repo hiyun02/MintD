@@ -12,7 +12,7 @@ public interface IDiaryService {
     List<DiaryDTO> getDiaryList() throws Exception;
 
     // 나의 게시물 목록 가져오기
-    List<DiaryDTO> getMyDiaryList(DiaryDTO pDTO) throws Exception;
+    List<DiaryDTO> getFeedDiaryList(DiaryDTO pDTO) throws Exception;
 
     // 게시물 추가하기
     void insertDiaryInfo(DiaryDTO pDTO, MultipartFile file) throws Exception;

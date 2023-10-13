@@ -20,8 +20,8 @@
         ORDER BY DIARY_SEQ, REG_DT DESC
     </select>
 
-    <!-- 나의 게시물 리스트 가져오기(로그인한 상태일 때) -->
-    <select id="getMyDiaryList" resultType="DiaryDTO">
+    <!-- 피드에 표시할 게시글 가져오기 -->
+    <select id="getFeedDiaryList" resultType="DiaryDTO">
         SELECT DIARY_SEQ, LIKE_CNT, READ_CNT, IMG_PATH, NFT_YN, CONTENTS, READ_CNT,
                TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT
         FROM DIARY

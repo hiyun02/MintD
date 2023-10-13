@@ -12,7 +12,7 @@ public interface IDiaryMapper {
     List<DiaryDTO> getDiaryList() throws Exception;
 
     // 나의 게시물 목록 가져오기(내 정보를 보내야 내가 등록한 게시물들을 가져올 수가 있음, 그리고 받아도 와야 함)
-    List<DiaryDTO> getMyDiaryList(DiaryDTO pDTO) throws Exception;
+    List<DiaryDTO> getFeedDiaryList(DiaryDTO pDTO) throws Exception;
 
     // 게시물 추가하기(추가하려면 로그인이 되어 있어야 함, 내 정보 보내야한다는 뜻, 뭐 안 받아와도 됨 넣기만 하면 됨)
     void insertDiaryInfo(DiaryDTO pDTO) throws Exception;
@@ -59,10 +59,8 @@ public interface IDiaryMapper {
     // 검색 페이지에서 조회수순으로 정렬
     List<DiaryDTO> sortByReadCnt() throws Exception;
 
-
     //게시글 수 카운트
     DiaryDTO getMyDiaryCnt(DiaryDTO pDTO) throws Exception;
-
 
     //프로필사진
     UserInfoDTO getProfilePath(UserInfoDTO pDTO) throws Exception;

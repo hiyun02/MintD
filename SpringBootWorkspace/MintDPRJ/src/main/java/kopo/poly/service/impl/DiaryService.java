@@ -20,51 +20,38 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class DiaryService implements IDiaryService {
-
     // 서비스 파일 내에서 매퍼를 호출하기 위해서 서비스가 실행되는 동안 메모리에 같이 올려두기
     private final IDiaryMapper diaryMapper;
-
+    // @Value 어노테이션으로 properties에 미리 지정해둔 파일 저장 경로를 불러와서 변수에 저장하기(업로드한 이미지가 저장된 위치)
+    @Value("${file.upload-dir}")
+    private String uploadImagePath;
     // 게시물 목록 가져오기
     @Override
     public List<DiaryDTO> getDiaryList() throws Exception {
         log.info(this.getClass().getName() + " 게시물 목록 가져오기 서비스(getDiaryList)실행");
-
         // 매퍼의 함수를 호출한 다음 받아온 값 변수에 저장(변수는 리스트 타입을 가짐)
         List<DiaryDTO> rList = diaryMapper.getDiaryList();
-
         // 리스트의 길이는 "사이즈라고 말함"(배열이 length)
         // 매퍼에게 작업을 요청한 후 받아온 결과 수 == 가져온 게시물의 개수(rList의 개수만큼 데이터를 가져온 것)
         log.info("rList의 개수는: " + rList.size());
-
         log.info(this.getClass().getName() + " 게시물 목록 가져오기 서비스(getDiaryList)종료!");
-
         // 매퍼 호출하고 받아온 결과값 돌려주기, 그래야 서비스가 받아서 컨트롤러에게 돌려주고 컨트롤러가 띄워줄 수 있음.
         return rList;
     }
-
     // 나의 게시물 목록 가져오기
     @Override
-    public List<DiaryDTO> getMyDiaryList(DiaryDTO pDTO) throws Exception {
-        log.info(this.getClass().getName() + " 내 게시물 목록 가져오기 서비스(getMyDiaryList)실행!");
+    public List<DiaryDTO> getFeedDiaryList(DiaryDTO pDTO) throws Exception {
+        log.info(this.getClass().getName() + " 내 게시물 목록 가져오기 서비스(getFeedDiaryList)실행!");
         // Who am I?(누구의 아이디가 들어왔는가)
         log.info("컨트롤러에서 넘어온 아이디 확인 : " + pDTO.getReg_id());
-
         // 매퍼의 함수 호출한 다음 받아온 값 변수에 저장하기(변수는 리스트 타입)
-        List<DiaryDTO> rList = diaryMapper.getMyDiaryList(pDTO);
-
+        List<DiaryDTO> rList = diaryMapper.getFeedDiaryList(pDTO);
         // 리스트의 길이 == 내가 받아온 리스트의 개수
         log.info("내가 작성한 리스트의 개수 : " + rList.size());
-
-        log.info(this.getClass().getName() + " 내 게시물 목록 가져오기 서비스(getMyDiaryList)종료!");
-
+        log.info(this.getClass().getName() + " 내 게시물 목록 가져오기 서비스(getFeedDiaryList)종료!");
         // 매퍼한테 받아온 값 컨트롤러로 돌려주기, 그래야 컨트롤러에서 웹으로 전송할 수 있음
         return rList;
     }
-
-    // @Value 어노테이션으로 properties에 미리 지정해둔 파일 저장 경로를 불러와서 변수에 저장하기(업로드한 이미지가 저장된 위치)
-    @Value("${file.upload-dir}")
-    private String uploadImagePath;
-
     // 게시물 추가하기(이미지 저장) --> 게시물 추가는 데이터베이스에 저장하는 작업 이전에, 업로드된 파일(이미지)을 지정한 경로에 저장하는 것이 먼저!
     // 기기에 저장이 안 됐으면 데이터베이스에 경로를 저장해도 이미지를 불러올 수가 없으니까(허위 경로!)
     // 무언가를 CRUD 할 때는 꼭 이 어노테이션을 사용해야 함(데이터베이스 관련 작업들을 한번에 묶어서 처리함. 전부 성공/전부 실패여야만 작동)
@@ -75,21 +62,17 @@ public class DiaryService implements IDiaryService {
         log.info(this.getClass().getName() + " 게시물 추가하기 서비스(insertDiaryInfo)실행!");
 
         try {
-
             // uploadImagePath(지정해둔 경로)에 날짜(DateUtil의 함수 호출해서 내 마음대로 형식 바꾼다음)와 시간, 원본파일명을 더해서 기기에 "저장"
             // 파일의 함수 호출해서 새 파일을 만드는데 그 새 파일은 ~~~를 가진 파일인 것!
             file.transferTo(new File(uploadImagePath + DateUtil.getDateTime("yyyyMMdd_HHmmss_") + file.getOriginalFilename()));
-
             // 업로드한 이미지의 위치(경로)와 업로드 날짜, 원본 파일명을 합쳐서 upLoadImgInfo에 저장(저장될 최종 파일명은 날짜 + 원본 파일명)
             // 위에서 파일 생성할 때 매개변수로 넣었던 것들을 그대로 갖는 변수를 하나 만드는 것임 위에서 만든 게 파일의 정보였다면 여기서 만드는 건 파일의 이름
             String upLoadImgInfo = uploadImagePath + DateUtil.getDateTime("yyyyMMdd_HHmmss_") + file.getOriginalFilename();
             log.info("추가된 파일의 정보는: {}", upLoadImgInfo);
-
             // 사용자가 지정한 경로에 해당하는 파일이나 디렉토리를 다루기 위해 File 객체를 생성(File이라는 클래스가 있는데 이 클래스의 객체를 생성할 것)
             // File은 변수명, 사용자가 지정한 경로(upLoadImgInfo)에 해당하는 파일 또는 디렉토리를 저장함(나타냄)
             // 생성자를 호출할 때 사용자가 지정한 경로(upLoadImgInfo)를 매개변수로 전달하여 생성과 동시에 파일 객체를 초기화시킴
             File File = new File(upLoadImgInfo);
-
             // .exists()는 파일 또는 디렉토리가 존재하는지 여부를 확인하는 함수이며 존재하는 경우 true를, 존재하지 않는 경우 false를 반환함
             //  false일 경우(존재하지 않는다면) 폴더를 새로 생성함(선생님 폴더가 없는데 저장을 어떻게 해요 그쵸?)
             if (!File.exists()) {
@@ -98,17 +81,12 @@ public class DiaryService implements IDiaryService {
             } else {
                 log.info("폴더가 이미 생성되어 있습니다.");
             }
-
             log.info("저장된 이미지의 파일명: {}", upLoadImgInfo);
-
-
 //            unix 기반 디렉터리 구분자는 "/"
             String fullFilePath = uploadImagePath + upLoadImgInfo;
             log.info("저장된 파일의 경로와 파일명 : {}", fullFilePath);
-
             // DTO에서 img_path를 담는 변수의 값을 내가 만든 파일명으로 변경
             pDTO.setImg_path(upLoadImgInfo);
-
             // 컨트롤러가 보내준 값 변경하고 매퍼한테 보내면서 함수 호출
             diaryMapper.insertDiaryInfo(pDTO);
         } catch (Exception e) {
@@ -119,7 +97,6 @@ public class DiaryService implements IDiaryService {
         }
         // 반환 값은 없음(추가만 하면 끝)
     }
-
     // 게시물 상세보기
     @Transactional
     @Override
@@ -127,13 +104,11 @@ public class DiaryService implements IDiaryService {
         log.info(this.getClass().getName() + " 게시물 상세보기 서비스(getDiaryInfo)실행!");
 
         // 컨트롤러로부터 받은 값을 매퍼에게 주면서 매퍼가 갖고 있는 함수 호출한 뒤, 결과값을 받아와서 rDTO라는 변수에 저장
-       DiaryDTO rDTO = diaryMapper.getDiaryInfo(pDTO);
+        DiaryDTO rDTO = diaryMapper.getDiaryInfo(pDTO);
         log.info(this.getClass().getName() + " 게시물 상세보기 서비스(getDiaryInfo)종료!");
-
         // 매퍼로부터 받아온 값을 컨트롤러로 돌려주기
         return rDTO;
     }
-
     // 게시물 조회수 증가시키기
     @Override
     public void updateDiaryReadCnt(DiaryDTO pDTO) throws Exception {
@@ -141,14 +116,12 @@ public class DiaryService implements IDiaryService {
         // 매퍼 함수 호출해서 조회수 증가시키기
         diaryMapper.updateDiaryReadCnt(pDTO);
     }
-
     // 게시물 수정하기 --> 이거는 아직 하지말 것!
     @Override
     public void updateDiaryInfo(DiaryDTO pDTO) throws Exception {
         log.info(this.getClass().getName() + " 게시물 수정 서비스(updateDiaryInfo) 실행!");
         diaryMapper.updateDiaryInfo(pDTO);
     }
-
     // 게시물 삭제하기
     @Transactional
     @Override
@@ -157,8 +130,6 @@ public class DiaryService implements IDiaryService {
         diaryMapper.deleteDiaryInfo(pDTO);
         // 반환 값은 없음(삭제만 하면 끝)
     }
-
-
     // 게시물 좋아요수 증가
     @Transactional
     @Override
@@ -167,73 +138,60 @@ public class DiaryService implements IDiaryService {
         diaryMapper.updateDiaryLikeCnt(pDTO);
         // 반환 값 없이 쿼리문 실행해서 데이터베이스 내부 데이터 변경
     }
-
-
     // 북마크 추가
     @Override
     public void insertBookMark(DiaryDTO pDTO) throws Exception {
         log.info(this.getClass().getName() + " 북마크 추가 서비스(insertBookMark)실행!");
         diaryMapper.insertBookMark(pDTO);
     }
-
     // 북마크 여부 조회
     @Override
     public String getBookMarkExists(DiaryDTO pDTO) throws Exception {
         log.info(this.getClass().getName() + " 북마크 여부 조회 서비스(getBookMarkExists) 실행");
         return String.valueOf(diaryMapper.getBookMarkExists(pDTO));
     }
-
-
     // NFT 다이어리 리스트 가져오기
     @Override
     public List<DiaryDTO> getNFTDiaryList(DiaryDTO pDTO) throws Exception {
         log.info(this.getClass().getName() + " NFT 다이어리 리스트 가져오기 서비스(getNFTDiaryList) 실행!");
         return diaryMapper.getNFTDiaryList(pDTO);
     }
-
-    // 보괌함 리스트 가져오기 전 데이터 조회(북마크 테이블)
+    // 보관함 리스트 가져오기 전 데이터 조회(북마크 테이블)
     @Override
     public List<DiaryDTO> getBookMarkFind(DiaryDTO pDTO) throws Exception {
         log.info(this.getClass().getName() + " 북마크 리스트 가져오기 위해 북마크 테이블 조회 실행 합니다.");
         return diaryMapper.getBookMarkFind(pDTO);
     }
-
     // 보관함 리스트 가져오기
     @Override
     public List<DiaryDTO> getBookMarkList(DiaryDTO sDTO) throws Exception {
         log.info(this.getClass().getName() + " 북마크 리스트 가져오기 위해 getBookMarkList 실행 합니다.");
         return diaryMapper.getBookMarkList(sDTO);
     }
-
     // 검색 페이지 불러오기
     @Override
     public List<DiaryDTO> getSearchFeed() throws Exception {
         log.info(this.getClass().getName() + " 검색 페이지 가져오기 위한 서비스(getSearchFeed) 실행합니다! ");
         return diaryMapper.getSearchFeed();
     }
-
     // 검색 페이지 결과 인기순으로 정렬
     @Override
     public List<DiaryDTO> sortByLikeCnt() throws Exception {
         log.info(this.getClass().getName() + " 검색 페이지 인기순으로 정렬 서비스(sortByLikeCnt) 실행합니다!");
         return diaryMapper.sortByLikeCnt();
     }
-
     // 검색 페이지 결과 최신순으로 정렬
     @Override
     public List<DiaryDTO> sortByDatetime() throws Exception {
         log.info(this.getClass().getName() + " 검색 페이지 최신순으로 정렬 서비스(sortByDatetime) 실행!");
         return diaryMapper.sortByDatetime();
     }
-
     // 검색 페이지 결과 조회수순으로 정렬
     @Override
     public List<DiaryDTO> sortByReadCnt() throws Exception {
         log.info(this.getClass().getName() + " 검색 페이지 조회수순으로 정렬 서비스(sortByReadCnt) 실행!");
         return diaryMapper.sortByReadCnt();
     }
-
-
     @Override
     public UserInfoDTO getProfilePath(UserInfoDTO pDTO) throws Exception {
         return diaryMapper.getProfilePath(pDTO);

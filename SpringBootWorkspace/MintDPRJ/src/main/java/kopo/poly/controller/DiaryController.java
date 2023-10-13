@@ -115,20 +115,25 @@ public class DiaryController {
     private final IHashTagService hashTagService;
 
     // 사용자 피드
-    @GetMapping(value = "/getMyDiaryList")
-    public String getMyDiaryList(ModelMap modelMap, HttpSession session) throws Exception {
-        log.info(this.getClass().getName() + " 나의 게시물 목록 가져오기(getMyDiaryList)컨트롤러 실행!");
+    @GetMapping(value = "/getFeedInfo")
+    public String getMyDiaryList(HttpServletRequest request, ModelMap modelMap, HttpSession session) throws Exception {
+        log.info(this.getClass().getName() + " 나의 게시물 목록 가져오기(getDiaryList)컨트롤러 실행!");
 
         try {
-            // 나의 게시물 목록을 가져오려면 세션으로부터 아이디를 받아와야 함, 매개변수로 넣어놓은 게 key! 이 이름으로 저장했으니 불러올 때도 이름으로 불러오면 됨
-            String user_id = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+            // 게시물 목록을 가져오려면 작성자 아이디가 필요함 매개변수로 넣어놓은 게 key! 이 이름으로 저장했으니 불러올 때도 이름으로 불러오면 됨
+            String user_id = CmmUtil.nvl((String) request.getParameter("user_id"));
+
+            if (user_id.length() == 0) {
+                log.info("파라미터 user_id값 없음, 내피드 불러오기");
+                user_id = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+            }
 
             // DTO의 객체 새로 생성한 뒤, reg_id라는 변수에 세션으로부터 받아온 값을 저장
             DiaryDTO pDTO = new DiaryDTO();
             pDTO.setReg_id(user_id);
 
             // 서비스의 함수를 호출한 뒤, 그 결과를 받아와서 rList에 저장
-            List<DiaryDTO> rList = diaryService.getMyDiaryList(pDTO);
+            List<DiaryDTO> rList = diaryService.getFeedDiaryList(pDTO);
 
             // 만약 서비스의 함수 실행 뒤, 받아온 값이 아무것도 없다면 새로운 리스트를 생성해서 rList에 담기
             if (rList == null) {
@@ -155,59 +160,14 @@ public class DiaryController {
             log.info(followDTO.toString());
             modelMap.addAttribute("followDTO", followDTO);
 
-            // 에러가 나면 잡기
         } catch (Exception e) {
             log.info(e.toString());
             e.printStackTrace();
-
-            // 에러가 있든 없든 로그 찍기
         } finally {
-            log.info(this.getClass().getName() + " 나의 게시물 목록 가져오기(getMyDiaryList)컨트롤러 종료!");
+            log.info(this.getClass().getName() + " 나의 게시물 목록 가져오기(getDiaryList)컨트롤러 종료!");
         }
-
-        // 나의 게시물 리스트 가져올 주소
         return "main/mainFeed";
     }
-
-    @GetMapping(value = "/getUserDiaryList")
-    public String getUserDiaryList(ModelMap modelMap, HttpServletRequest request) throws Exception {
-        log.info(this.getClass().getName() + " 나의 게시물 목록 가져오기(getMyDiaryList)컨트롤러 실행!");
-
-        try {
-            // 나의 게시물 목록을 가져오려면 세션으로부터 아이디를 받아와야 함, 매개변수로 넣어놓은 게 key! 이 이름으로 저장했으니 불러올 때도 이름으로 불러오면 됨
-            String reg_id = CmmUtil.nvl((String) request.getParameter("user_id"), "hayun");
-            log.info("reg_id : " + reg_id);
-
-
-            // DTO의 객체 새로 생성한 뒤, reg_id라는 변수에 세션으로부터 받아온 값을 저장
-            DiaryDTO pDTO = new DiaryDTO();
-            pDTO.setReg_id(reg_id);
-
-            // 서비스의 함수를 호출한 뒤, 그 결과를 받아와서 rList에 저장
-            List<DiaryDTO> rList = diaryService.getMyDiaryList(pDTO);
-
-            // 만약 서비스의 함수 실행 뒤, 받아온 값이 아무것도 없다면 새로운 리스트를 생성해서 rList에 담기
-            if (rList == null) {
-                rList = new ArrayList<>();
-            }
-
-            // 화면으로 보낼 모델맵의 "rList" 속성에 값으로 rList를 추가해서 보내기
-            modelMap.addAttribute("rList", rList);
-
-            // 에러가 나면 잡기
-        } catch (Exception e) {
-            log.info(e.toString());
-            e.printStackTrace();
-
-            // 에러가 있든 없든 로그 찍기
-        } finally {
-            log.info(this.getClass().getName() + " 나의 게시물 목록 가져오기(getMyDiaryList)컨트롤러 종료!");
-        }
-
-        // 나의 게시물 리스트 가져올 주소
-        return "user/userFeed";
-    }
-
 
     // 게시물 등록 페이지로 이동
     @GetMapping(value = "/writeDiary")
