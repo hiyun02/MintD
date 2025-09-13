@@ -11,7 +11,7 @@
     </select>
 
     <update id="updateProfile" parameterType="UserInfoDTO">
-        UPDATE USER_INFO
+        UPDATE USER_INF
         SET USER_INTRO = #{user_intro},
             USER_NICK = #{user_nick}
         WHERE USER_ID = #{user_id};
@@ -19,12 +19,12 @@
 
     <select id="getUserId" parameterType="UserInfoDTO" resultType="UserInfoDTO">
         SELECT USER_ID
-        FROM USER_INFO
+        FROM USER_INF
         WHERE USER_ID = #{user_id};
     </select>
 
     <update id="updatePhoto" parameterType="UserInfoDTO">
-        UPDATE USER_INFO
+        UPDATE USER_INF
         SET PROFILE_PATH = #{profile_path}
         WHERE USER_ID = #{user_id};
     </update>

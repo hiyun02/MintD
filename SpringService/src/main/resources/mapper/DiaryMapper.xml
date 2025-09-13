@@ -105,7 +105,7 @@
 
     <!-- 작성자 프로필 이미지 가져오기 -->
     <select id="getProfilePath" parameterType="UserInfoDTO" resultType="UserInfoDTO">
-        SELECT PROFILE_PATH FROM USER_INFO
+        SELECT PROFILE_PATH FROM USER_INF
             WHERE USER_ID = #{user_id}
     </select>
 
@@ -125,7 +125,7 @@
         )
         VALUES (
                 (SELECT NVL(MAX(A.BOOKMARK_SEQ),0)+1 FROM BOOKMARK A),
-                #{diary_seq}, (SELECT USER_ID FROM USER_INFO WHERE USER_ID = #{reg_id})
+                #{diary_seq}, (SELECT USER_ID FROM USER_INF WHERE USER_ID = #{reg_id})
                )
     </insert>
 

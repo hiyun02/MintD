@@ -3,7 +3,7 @@
 
 <mapper namespace="kopo.poly.persistance.mapper.IUserInfoMapper">
     <insert id="insertUserInfo" parameterType="UserInfoDTO">
-        INSERT INTO USER_INFO
+        INSERT INTO USER_INF
         (
          USER_ID,
          USER_NICK,
@@ -28,7 +28,7 @@
 
     <select id="getLogin" parameterType="UserInfoDTO" resultType="UserInfoDTO">
         SELECT USER_ID, USER_NICK, USER_EMAIL, USER_NAME, PROFILE_PATH, USER_INTRO
-        FROM USER_INFO
+        FROM USER_INF
         WHERE USER_ID = #{user_id}
           AND USER_PWD = #{user_pwd}
     </select>
@@ -36,7 +36,7 @@
         SELECT
             CASE WHEN COUNT(1) = 0 THEN 'N' ELSE 'Y' END AS Exists_yn
         FROM
-            USER_INFO
+            USER_INF
         WHERE
             USER_ID = #{user_id};
     </select>
@@ -45,7 +45,7 @@
         SELECT
             CASE WHEN COUNT(1) = 0 THEN 'N' ELSE 'Y' END AS EXISTS_YN
         FROM
-            USER_INFO
+            USER_INF
         WHERE
             USER_EMAIL = #{user_email};
     </select>
@@ -53,21 +53,21 @@
     <select id="getUserId" parameterType="UserInfoDTO" resultType="UserInfoDTO">
         SELECT
             USER_ID
-        FROM USER_INFO
+        FROM USER_INF
         WHERE 1=1
         AND USER_EMAIL = #{user_email}
     </select>
 
     <select id="checkUserIdAndEmail" parameterType="UserInfoDTO" resultType="UserInfoDTO">
         SELECT USER_ID,USER_EMAIL
-        FROM USER_INFO
+        FROM USER_INF
         WHERE USER_ID = #{user_id}
           AND USER_EMAIL = #{user_email}
     </select>
 
 
     <update id="updateUserPwd" parameterType="UserInfoDTO" >
-        UPDATE  USER_INFO
+        UPDATE  USER_INF
         SET USER_PWD = #{user_pwd}
         WHERE USER_ID = #{user_id}
     </update>
